@@ -17,41 +17,53 @@ def clean_housing_data():
     print("Loading raw housing data...")
     df = pd.read_csv(RAW_DATA_PATH)
     print(f"Raw data shape: {df.shape}")
+    print(f"Columns: {df.columns.tolist()[:10]}...")
     
-    # Standardize column names (lowercase, replace spaces with underscores)
-    df.columns = df.columns.str.lower().str.replace(' ', '_')
+    # Drop unnamed columns
+    df = df.drop(columns=[col for col in df.columns if 'Unnamed' in col])
     
     # Drop duplicates
     initial_rows = len(df)
     df = df.drop_duplicates()
     print(f"Removed {initial_rows - len(df)} duplicate rows")
     
-    # Clean price column (remove $ and commas, convert to numeric)
-    if 'price' in df.columns:
-        df['price'] = df['price'].replace('[\$,]', '', regex=True).astype(float)
-    
-    # Clean sqft columns
-    sqft_cols = [col for col in df.columns if 'sqft' in col or 'square' in col]
-    for col in sqft_cols:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    
-    # Clean bedrooms and bathrooms
-    if 'bedrooms' in df.columns:
-        df['bedrooms'] = pd.to_numeric(df['bedrooms'], errors='coerce')
-    if 'bathrooms' in df.columns:
-        df['bathrooms'] = pd.to_numeric(df['bathrooms'], errors='coerce')
+    # Rename region to city for consistency
+    if 'region' in df.columns:
+        df = df.rename(columns={'region': 'city'})
     
     # Standardize city names (title case, strip whitespace)
     if 'city' in df.columns:
         df['city'] = df['city'].str.strip().str.title()
-    elif 'town' in df.columns:
-        df = df.rename(columns={'town': 'city'})
-        df['city'] = df['city'].str.strip().str.title()
+        df['city'] = df['city'].fillna('Unknown')
+    
+    # Clean price column (remove $ and commas, convert to numeric)
+    if 'price' in df.columns:
+        df['price'] = df['price'].replace('[\$,\s]', '', regex=True)
+        df['price'] = pd.to_numeric(df['price'], errors='coerce')
+    
+    # Clean sqft column (remove commas)
+    if 'sqft' in df.columns:
+        df['sqft'] = df['sqft'].replace('[,]', '', regex=True)
+        df['sqft'] = pd.to_numeric(df['sqft'], errors='coerce')
+    
+    # Clean sqft_lot column
+    if 'sqft_lot' in df.columns:
+        df['sqft_lot'] = df['sqft_lot'].replace('[,sqft\s]', '', regex=True)
+        df['sqft_lot'] = pd.to_numeric(df['sqft_lot'], errors='coerce')
+    
+    # Rename beds/baths to bedrooms/bathrooms
+    if 'beds' in df.columns:
+        df = df.rename(columns={'beds': 'bedrooms'})
+    if 'baths' in df.columns:
+        df = df.rename(columns={'baths': 'bathrooms'})
+    
+    # Clean bedrooms and bathrooms
+    df['bedrooms'] = pd.to_numeric(df['bedrooms'], errors='coerce')
+    df['bathrooms'] = pd.to_numeric(df['bathrooms'], errors='coerce')
     
     # Standardize property type
-    if 'property_type' in df.columns or 'type' in df.columns:
-        property_col = 'property_type' if 'property_type' in df.columns else 'type'
-        df = df.rename(columns={property_col: 'propertyType'})
+    if 'property_type' in df.columns:
+        df = df.rename(columns={'property_type': 'propertyType'})
         # Standardize names
         type_mapping = {
             'single family': 'Single Family',
@@ -69,24 +81,32 @@ def clean_housing_data():
         df['propertyType'] = df['propertyType'].replace(type_mapping)
         df['propertyType'] = df['propertyType'].str.title()
     
+    # Clean livability scores (remove /100 and convert to numeric)
+    for score_col in ['walk_score', 'bike_score', 'transit_score']:
+        if score_col in df.columns:
+            df[score_col] = df[score_col].replace('[/100\s]', '', regex=True)
+            df[score_col] = pd.to_numeric(df[score_col], errors='coerce')
+    
+    # Clean risk columns (extract numeric value from "Level (X/10)" format)
+    risk_cols = ['flood_risk', 'fire_risk', 'wind_risk', 'air_risk', 'heat_risk']
+    for risk_col in risk_cols:
+        if risk_col in df.columns:
+            # Extract number from pattern like "Major (6/10)"
+            df[risk_col] = df[risk_col].str.extract(r'\((\d+)/10\)')[0]
+            df[risk_col] = pd.to_numeric(df[risk_col], errors='coerce')
+    
     # Remove rows with missing critical fields
     critical_cols = ['price', 'city']
-    df = df.dropna(subset=[col for col in critical_cols if col in df.columns])
+    df = df.dropna(subset=critical_cols)
     
     # Filter out unrealistic values
-    if 'price' in df.columns:
-        df = df[(df['price'] >= 50000) & (df['price'] <= 10000000)]  # Reasonable price range
+    df = df[(df['price'] >= 50000) & (df['price'] <= 10000000)]  # Reasonable price range
+    df = df[(df['bedrooms'] >= 0) & (df['bedrooms'] <= 20)] if 'bedrooms' in df.columns else df
+    df = df[(df['bathrooms'] >= 0) & (df['bathrooms'] <= 15)] if 'bathrooms' in df.columns else df
     
-    if 'bedrooms' in df.columns:
-        df = df[(df['bedrooms'] >= 0) & (df['bedrooms'] <= 20)]
-    
-    if 'bathrooms' in df.columns:
-        df = df[(df['bathrooms'] >= 0) & (df['bathrooms'] <= 15)]
-    
-    # Add derived columns
-    sqft_col = next((col for col in df.columns if 'sqft' in col), None)
-    if sqft_col and 'price' in df.columns:
-        df['pricePerSqft'] = df['price'] / df[sqft_col]
+    # Recalculate price per sqft (clean version)
+    if 'sqft' in df.columns and 'price' in df.columns:
+        df['pricePerSqft'] = df['price'] / df['sqft']
         df['pricePerSqft'] = df['pricePerSqft'].replace([np.inf, -np.inf], np.nan)
     
     # Sort by city and price

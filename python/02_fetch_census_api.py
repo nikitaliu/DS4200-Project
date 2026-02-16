@@ -55,10 +55,18 @@ def fetch_county_data():
     
     if response.status_code != 200:
         print(f"Error fetching county data: {response.status_code}")
-        print(response.text)
+        print(f"Response text: {response.text}")
+        print(f"URL: {response.url}")
         return None
     
-    data = response.json()
+    try:
+        data = response.json()
+    except requests.exceptions.JSONDecodeError:
+        print(f"Failed to parse JSON response")
+        print(f"Status code: {response.status_code}")
+        print(f"Response text: {response.text}")
+        print(f"URL: {response.url}")
+        return None
     
     # Convert to DataFrame
     df = pd.DataFrame(data[1:], columns=data[0])
@@ -106,10 +114,18 @@ def fetch_town_data():
     
     if response.status_code != 200:
         print(f"Error fetching town data: {response.status_code}")
-        print(response.text)
+        print(f"Response text: {response.text}")
+        print(f"URL: {response.url}")
         return None
     
-    data = response.json()
+    try:
+        data = response.json()
+    except requests.exceptions.JSONDecodeError:
+        print(f"Failed to parse JSON response")
+        print(f"Status code: {response.status_code}")
+        print(f"Response text: {response.text}")
+        print(f"URL: {response.url}")
+        return None
     
     # Convert to DataFrame
     df = pd.DataFrame(data[1:], columns=data[0])

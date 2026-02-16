@@ -1,0 +1,484 @@
+townName,medianIncome,population
+Abington,50860,20795
+Acton,94732,43158
+Acushnet,56265,16284
+Adams,87194,21850
+Agawam,94131,26962
+Alford,91090,21023
+Allston,50769,6685
+Amesbury,55311,7433
+Amherst,89188,42819
+Andover,69769,22568
+Arlington,56396,33693
+Ashburnham,91434,32480
+Ashby,68942,30658
+Ashfield,52747,23431
+Ashland,69118,5189
+Ashley Falls,51899,3505
+Assonet,81551,6267
+Athol,53556,16394
+Attleboro,91606,8890
+Auburn,64502,35740
+Auburndale,60627,26777
+Avon,93323,13792
+Ayer,58433,48021
+Baldwinville,61016,10733
+Barnstable,52612,28897
+Barre,67159,28483
+Barrington,90994,49974
+Becket,85920,19541
+Bedford,51585,31531
+Belchertown,73939,4443
+Bellingham,51021,24457
+Belmont,93573,16653
+Berkley,90757,18417
+Berlin,56873,14692
+Bernardston,50161,6175
+Beverly,76557,42065
+Billerica,82606,38763
+Blackstone,79127,16534
+Blandford,75851,45397
+Block Island,74253,1516
+Bolton,73247,29276
+Bondsville,58529,29300
+Boston,101271,89268
+Bourne,71243,17185
+Boxboro,58571,44099
+Boxborough,88044,44976
+Boxford,52568,45774
+Boylston,52695,7027
+Bozrah,72002,10258
+Braintree,83159,44504
+Brewster,62666,18986
+Bridgewater,53561,6392
+Brighton,88952,31854
+Brimfield,58392,27662
+Brockton,63067,35535
+Brookfield,85222,28599
+Brookline,199575,16837
+Burlington,69115,35818
+Burrillville,60965,14683
+Buzzards Bay,92530,8654
+Cambridge,93773,88110
+Canaan,67412,32266
+Canton,56910,38270
+Carlisle,120206,30446
+Carver,72361,26518
+Cataumet,91523,28419
+Centerville,72403,5616
+Charlemont,64820,23141
+Charlestown,56374,8074
+Charlton,83827,6678
+Chatham,59914,21198
+Chelmsford,72299,32890
+Chelsea,93689,48585
+Cheshire,94020,47557
+Chester,79467,7693
+Chestnut Hill,53627,13839
+Chestnuthill,92941,10055
+Chicopee,68047,26834
+Chilmark,60230,31105
+Clarksburg,71976,20707
+Clinton,73776,49262
+Cohasset,51306,35080
+Colchester,77251,11776
+Colrain,90294,14474
+Concord,55530,26959
+Conway,53748,34320
+Cotuit,82562,36968
+Coventry,50663,18545
+Cranston,57994,39766
+Cumberland,80303,33021
+Dalton,89353,8304
+Danielson,94417,22675
+Danvers,73664,28938
+Dartmouth,70080,6636
+Dedham,76736,32728
+Deerfield,87505,33673
+Dennis,74548,5854
+Dennis Port,57392,6355
+Dennis Pt,88559,26556
+Devens,71919,31309
+Dighton,82970,9931
+Dorchester,62688,49215
+Dorchester Center,87157,9458
+Douglas,90772,7327
+Dover,185733,45545
+Dracut,84698,28509
+Drury,65087,49542
+Dudley,75184,27671
+Dunstable,92107,32848
+Duxbury,94357,25666
+East Boston,65708,3011
+East Bridgewater,52811,10486
+East Brookfield,56546,7598
+East Dennis,84754,10061
+East Falmouth,91106,14322
+East Freetown,52911,11911
+East Greenwich,68227,2234
+East Longmeadow,69360,9180
+East Lyme,55759,23343
+East Otis,85153,28078
+East Sandwich,87504,11611
+East Taunton,58155,2302
+East Walpole,89384,8620
+East Wareham,71918,14757
+Eastford,80306,25445
+Eastham,81065,21646
+Edgartown,91976,30199
+Egremont,61835,21371
+Erving,81616,7049
+Essex,70932,43191
+Everett,57158,34855
+Exeter,57400,48016
+Fairhaven,65151,47642
+Fall River,54499,6154
+Falmouth,62183,11295
+Feeding Hills,62874,13415
+Fiskdale,55539,37711
+Fitchburg,52557,47405
+Florida,66482,43360
+Forestdale,52961,7200
+Foxboro,61969,26357
+Framingham,78643,7869
+Franklin,88467,29736
+Gales Ferry,75876,7444
+Gardner,53987,26295
+Georgetown,83986,27399
+Gilbertville,54735,4996
+Gill,54555,49064
+Glocester,90818,46914
+Gloucester,67429,24830
+Grafton,64373,11893
+Granville,58754,8436
+Great Barrington,55895,11177
+Greenfield,80746,24738
+Greenport,89790,37352
+Griswold,55600,46919
+Groton,77643,34124
+Groveland,59007,45764
+Halifax,94080,42410
+Hampden,58208,45447
+Hancock,93484,23589
+Hanover,86212,22453
+Hanson,82635,48525
+Hardwick,68711,38828
+Harvard,81216,8420
+Harwich,50699,5301
+Harwich Port,50190,5588
+Harwich Pt,85743,15492
+Haverhill,69778,11102
+Hawley,84584,31641
+Heath,73093,37745
+Hingham,88210,5569
+Hinsdale,86631,39663
+Holbrook,54014,12455
+Holden,68070,16093
+Holland,66538,40777
+Holliston,84177,15729
+Holyoke,77751,5784
+Hope Valley,90328,8596
+Hopedale,90111,17533
+Hopkinton,55801,44974
+Hubbardston,88754,3306
+Hudson,60647,34592
+Hull,73355,13716
+Huntington,74376,27009
+Hyannis,52368,9780
+Hyannis Port,56655,12539
+Hyde Park,54495,45941
+Indian Orchard,75547,11393
+Ipswich,63403,27386
+Jamaica Plain,60966,13621
+Jamestown,78312,38621
+Jefferson,81289,27677
+Johnston,92675,36024
+Killingly,79749,9777
+Kingston,52491,20338
+Lakeville,64599,32236
+Lancaster,53051,24508
+Lanesboro,71699,26606
+Lanesborough,50876,5369
+Lawrence,54142,37093
+Lee,89734,20202
+Leicester,57987,12079
+Lenox,78940,44567
+Leominster,67019,42233
+Leverett,76258,23077
+Lexington,193847,26136
+Leyden,64098,22214
+Lincoln,145945,33251
+Lisbon,82217,30316
+Littleton,55949,13308
+Longmeadow,73944,6150
+Lowell,79305,146617
+Ludlow,57805,21896
+Lunenburg,70056,10237
+Lynn,63500,8343
+Lynnfield,59662,34375
+Malden,58130,21964
+Manchester,51679,24531
+Mansfield,63284,8506
+Marblehead,69128,12253
+Marion,59435,32932
+Marlborough,94078,5688
+Marshfield,80445,18296
+Marstons Mills,79124,13745
+Mashpee,93919,34899
+Mattapan,85247,48225
+Mattapoisett,79222,6984
+Maynard,87220,31211
+Medfield,88649,31646
+Medford,64069,28049
+Medway,81843,37580
+Melrose,90158,7849
+Mendon,94690,28289
+Merrimac,59823,40257
+Methuen,59540,46975
+Middleboro,54611,21364
+Middleton,88646,32663
+Middletown,79168,35977
+Milford,72687,30471
+Millbury,68071,5851
+Millis,61938,11833
+Millville,76144,40195
+Milton,55052,9000
+Monroe,78074,40506
+Monroe Township,88155,6232
+Monson,82320,45770
+Montague,53913,43304
+Monterey,74107,22450
+Montgomery,93404,25764
+Mount Washington,88494,4607
+Mystic,62161,8373
+Nahant,77122,36996
+Nantucket,77350,39850
+Natick,78761,32472
+Needham,73132,30351
+Needham Heights,61261,10317
+New Bedford,91576,917
+New Lebanon,53267,4474
+New London,74052,22209
+New Marlboro,76092,6245
+New Marlborough,50412,11838
+New Salem,90355,12543
+Newbury,73548,38496
+Newburyport,94425,11500
+Newport,68888,43756
+Newton,167295,40735
+Newton Center,67506,3286
+Newton Highlands,67955,4579
+Newton Upper Falls,55104,5573
+Newtonville,73190,2643
+Niantic,82479,12357
+Norfolk,86208,49811
+North Adams,55644,4266
+North Andover,52914,11018
+North Attleboro,94912,5468
+North Brookfield,91555,14897
+North Chatham,50728,14691
+North Chelmsford,50698,1865
+North Dartmouth,63923,7686
+North Easton,57400,895
+North Falmouth,86939,8582
+North Franklin,85270,4860
+North Grafton,67101,10511
+North Kingstown,82307,3282
+North Oxford,55486,5446
+North Providence,71364,8835
+North Reading,87259,11832
+North Smithfield,81667,7692
+North Stonington,71972,11630
+North Truro,51167,8151
+North Weymouth,51062,11308
+Northborough,74244,2656
+Northbridge,71689,5661
+Northfield,72925,16174
+Norton,59348,42497
+Norwell,88102,28714
+Norwich,87098,13924
+Norwood,56801,29394
+Oak Bluffs,56731,42614
+Oakham,67337,28625
+Old Lyme,57056,40307
+Old Saybrook,94261,12016
+Onset,71677,6542
+Orange,77569,44081
+Orleans,69065,28322
+Osterville,72556,22924
+Otis,78295,31962
+Oxford,92348,18807
+Palmer,67749,31432
+Pascoag,76256,46459
+Paxton,87080,45262
+Peabody,75731,6324
+Pembroke,73803,40909
+Pepperell,84578,24870
+Peru,88069,11588
+Petersham,75289,31790
+Phillipston,78178,6477
+Pikeville,65485,33710
+Pittsfield,70652,49482
+Plainville,71233,9748
+Plymouth,53709,14435
+Plympton,63116,35355
+Pocasset,92344,30470
+Portsmouth,89298,47918
+Princeton,64683,47956
+Providence,83982,5504
+Provincetown,78016,2031
+Quincy,83591,28960
+Randolph,87797,22312
+Raynham,86395,7105
+Reading,84620,27700
+Rehoboth,70559,42678
+Revere,77860,32509
+Richmond,71732,16003
+Riverside,80354,30826
+Rochdale,94472,18843
+Rochester,67640,11190
+Rockland,92356,43413
+Rockport,90821,49597
+Roslindale,69087,8330
+Rowe,74504,46430
+Rowley,63323,12114
+Roxbury,60975,39121
+Roxbury Crossing,71447,11523
+Royalston,73959,29933
+Russell,79703,5667
+Rutland,86487,14337
+Sagamore,90251,24129
+Sagamore Beach,77355,1039
+Salem,54835,42732
+Salisbury,88810,25159
+Sandisfield,90080,7602
+Sandwich,63216,43088
+Saugus,81471,40547
+Savoy,77532,22308
+Scituate,55713,39349
+Seekonk,60136,9804
+Sharon,69255,5009
+Sheffield,79548,28793
+Shelburne,51015,42892
+Shelburne Falls,77712,10516
+Sherborn,128415,39961
+Shirley,54158,28833
+Shrewsbury,56970,25309
+Shutesbury,71168,11938
+Smithfield,68017,25384
+Somerset,90034,15344
+Somerville,80384,13702
+South Boston,90943,904
+South Chatham,62763,13305
+South Dartmouth,82606,2500
+South Deerfield,88757,10360
+South Dennis,73574,1960
+South Easton,53636,7640
+South Egremont,54809,11416
+South Grafton,63456,4678
+South Hamilton,88765,7745
+South Weymouth,67100,2548
+South Yarmouth,71949,8439
+Southborough,87744,5044
+Southbridge,92783,13275
+Southfield,86187,31657
+Southwick,64489,12239
+Spencer,78538,48125
+Springfield,87131,112049
+Stafford Springs,58427,10676
+Stephentown,74285,9080
+Sterling,92808,42626
+Stockbridge,69198,7044
+Stoneham,65254,24758
+Stonington,51252,49238
+Stoughton,62173,44764
+Stow,76698,42441
+Sturbridge,63051,20781
+Sudbury,56949,44649
+Sunderland,58017,47289
+Sutton,75934,11941
+Swampscott,60209,28386
+Swansea,78920,22715
+Taunton,92318,36703
+Templeton,54854,9637
+Tewksbury,87660,48088
+Thompson,69856,44811
+Three Rivers,69963,5949
+Tiverton,77169,41932
+Tolland,64388,12941
+Topsfield,54300,10569
+Townsend,86586,44037
+Truro,56254,17015
+Turners Falls,74214,1260
+Tyngsboro,65183,45118
+Tyringham,56090,11238
+Uncasville,72415,16637
+Upton,92679,29071
+Uxbridge,68271,46240
+Village Of Nagog Woods,83434,3766
+Voluntown,60161,9188
+Waban,61314,33732
+Wakefield,71508,28954
+Wales,87545,26969
+Walpole,73061,41668
+Waltham,89749,18716
+Wareham,66907,44144
+Warren,77693,23777
+Warwick,76329,47928
+Washington,73624,21282
+Waterford,60488,28321
+Watertown,55240,27574
+Wayland,60478,48221
+Webster,54432,24262
+Wellesley,184291,34721
+Wellesley Hills,64178,14068
+Wellfleet,50302,27195
+Wendell,50055,22022
+Wenham,78699,13717
+West Barnstable,52125,8650
+West Boylston,66748,11979
+West Bridgewater,54621,7309
+West Brookfield,55126,14123
+West Dennis,68030,5622
+West Harwich,69181,1418
+West Hyannisport,88638,7006
+West Newbury,90940,2031
+West Newton,90441,3845
+West Roxbury,89650,7449
+West Springfield,85854,2406
+West Stockbridge,58152,14003
+West Tisbury,60267,6250
+West Wareham,51062,9405
+West Warwick,79926,2476
+West Yarmouth,54632,6729
+Westborough,53596,6788
+Westerly,56168,49243
+Westfield,57561,47563
+Westford,66616,13258
+Westminster,76734,10848
+Weston,146069,11371
+Westport,62910,19369
+Westwood,62199,12943
+Weymouth,73275,20728
+Whately,65913,11738
+Whitinsville,69123,2972
+Whitman,60167,39529
+Wilbraham,67260,15554
+Williamstown,53812,14777
+Willimantic,77285,12140
+Willington,51605,31900
+Wilmington,56767,10622
+Winchendon,61613,32139
+Winchester,63918,15589
+Windham,77446,25119
+Windsor,74818,18046
+Winthrop,54324,40358
+Woburn,59111,15787
+Woods Hole,66389,43110
+Woodstock,64043,46427
+Woonsocket,72350,33746
+Worcester,68935,80117
+Wrentham,88328,18234
+Yarmouth,60954,5846
+Yarmouth Port,72700,14203
+Yarmouthport,56469,14456

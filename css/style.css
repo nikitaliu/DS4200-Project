@@ -1,0 +1,317 @@
+/* Massachusetts Housing Visualization Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-blue: #3A7CA5;
+    --primary-orange: #F4845F;
+    --primary-green: #2ECC71;
+    --primary-purple: #9B59B6;
+    --dark-gray: #2C3E50;
+    --medium-gray: #7F8C8D;
+    --light-gray: #ECF0F1;
+    --background: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    color: var(--dark-gray);
+    background-color: var(--background);
+}
+
+/* Navigation */
+nav {
+    background: var(--dark-gray);
+    color: white;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: var(--primary-orange);
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+/* Sections */
+section {
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section:nth-child(even) {
+    background-color: #F8F9FA;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--dark-gray);
+    border-bottom: 3px solid var(--primary-blue);
+    padding-bottom: 0.5rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--primary-blue);
+}
+
+p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+}
+
+/* Visualization Containers */
+.viz-container {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#choropleth-container,
+#boxplot-container {
+    min-height: 400px;
+    position: relative;
+}
+
+iframe {
+    width: 100%;
+    height: 550px;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Takeaway boxes */
+.takeaway {
+    background: #FFF3CD;
+    border-left: 4px solid var(--primary-orange);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+    font-style: italic;
+}
+
+/* Chart Controls */
+.chart-controls {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--light-gray);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.control-button,
+.metric-select {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background: var(--primary-blue);
+    color: white;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.control-button:hover {
+    background: var(--primary-purple);
+}
+
+.metric-select {
+    background: white;
+    color: var(--dark-gray);
+    border: 1px solid var(--medium-gray);
+}
+
+/* Tooltip */
+.map-tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 12px;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-radius: 4px;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+    line-height: 1.4;
+}
+
+.map-tooltip strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-orange);
+    font-size: 13px;
+}
+
+/* Lists */
+ul {
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Links */
+a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--primary-orange);
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    background: var(--dark-gray);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 3rem;
+}
+
+/* Scroll to top button */
+.scroll-to-top {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+}
+
+.scroll-to-top:hover {
+    background: var(--primary-purple);
+    transform: translateY(-3px);
+}
+
+/* Data Source boxes */
+.data-source {
+    background: #E8F5E9;
+    border-left: 4px solid var(--primary-green);
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    section {
+        padding: 2rem 1rem;
+    }
+    
+    iframe {
+        height: 400px;
+    }
+    
+    .chart-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* Print styles */
+@media print {
+    nav, .scroll-to-top {
+        display: none;
+    }
+    
+    section {
+        page-break-inside: avoid;
+    }
+}
+
+/* SVG styling */
+svg {
+    font-family: 'Inter', sans-serif;
+}
+
+svg text {
+    font-size: 12px;
+    fill: var(--dark-gray);
+}
+
+svg .axis path,
+svg .axis line {
+    stroke: var(--medium-gray);
+}

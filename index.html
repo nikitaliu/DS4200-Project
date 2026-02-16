@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploring Massachusetts Housing Costs</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#data">Data</a></li>
+            <li><a href="#viz1">Price Map</a></li>
+            <li><a href="#viz2">Features</a></li>
+            <li><a href="#viz3">Livability</a></li>
+            <li><a href="#viz4">Distribution</a></li>
+            <li><a href="#viz5">Risk</a></li>
+            <li><a href="#viz6">Affordability</a></li>
+            <li><a href="#conclusions">Conclusions</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Exploring Massachusetts Housing Costs</h1>
+        <p>What Drives Property Value and Livability Across the State?</p>
+    </div>
+
+    <!-- Introduction -->
+    <section id="intro">
+        <h2>Introduction</h2>
+        <p>
+            Massachusetts has one of the most expensive housing markets in the United States. 
+            But what factors truly drive these costs? Is it location, property features, access to 
+            amenities, or income levels?
+        </p>
+        <p>
+            This visualization project explores over 8,000 property listings across Massachusetts, 
+            combined with demographic data from the US Census Bureau. Through interactive visualizations, 
+            we examine the relationships between housing prices, property characteristics, livability 
+            metrics, environmental risks, and income patterns.
+        </p>
+        <p>
+            <strong>Key Questions:</strong>
+        </p>
+        <ul>
+            <li>Where is housing most expensive in Massachusetts?</li>
+            <li>What property features correlate most strongly with price?</li>
+            <li>Does higher livability (walkability, transit access) command a premium?</li>
+            <li>Are more affordable areas exposed to higher environmental risks?</li>
+            <li>How do housing prices compare to local incomes across different towns?</li>
+        </ul>
+    </section>
+
+    <!-- About the Data -->
+    <section id="data">
+        <h2>About the Data</h2>
+        
+        <div class="data-source">
+            <h3>🏠 Housing Market Data (Kaggle)</h3>
+            <p>
+                <strong>Source:</strong> <a href="https://www.kaggle.com/datasets/vraj105/massachusetts-housing-data" target="_blank">Massachusetts Housing Data</a><br>
+                <strong>Records:</strong> 8,471 property listings<br>
+                <strong>Features:</strong> Price, square footage, bedrooms, bathrooms, property type, walk/bike/transit scores, 
+                environmental risk levels (flood, fire, wind, air, heat), school information, and more.
+            </p>
+        </div>
+
+        <div class="data-source">
+            <h3>📊 Demographic Data (US Census Bureau)</h3>
+            <p>
+                <strong>Source:</strong> American Community Survey (ACS) 5-Year Estimates<br>
+                <strong>Coverage:</strong> 483 Massachusetts cities and towns<br>
+                <strong>Metrics:</strong> Median household income, population
+            </p>
+        </div>
+
+        <p>
+            The datasets were cleaned, validated, and merged using Python (pandas). All visualizations 
+            are interactive—hover over elements to see details, use dropdowns to change metrics, 
+            and explore patterns that interest you!
+        </p>
+    </section>
+
+    <!-- Visualization 1: Choropleth Map -->
+    <section id="viz1">
+        <h2>Where Is Housing Most Expensive?</h2>
+        <div class="viz-container">
+            <div id="choropleth-container"></div>
+        </div>
+        <p class="takeaway">
+            <strong>Key Insight:</strong> Housing costs vary dramatically across Massachusetts. 
+            The interactive map above shows each city as a circle—larger circles represent higher 
+            populations, and colors indicate the selected metric. Switch between average price, 
+            price per square foot, price-to-income ratio, and median income to explore different 
+            patterns.
+        </p>
+    </section>
+
+    <!-- Visualization 2: Scatter Plot (Altair) -->
+    <section id="viz2">
+        <h2>What Features Drive Price?</h2>
+        <div class="viz-container">
+            <iframe src="altair_outputs/scatter_price_features.html"></iframe>
+        </div>
+        <p class="takeaway">
+            <strong>Key Insight:</strong> Square footage shows the strongest positive correlation 
+            with price. Use the panels above to explore how price relates to square feet, number of 
+            bedrooms, bathrooms, and price per square foot. Notice how different property types 
+            (colored differently) cluster in distinct price ranges.
+        </p>
+    </section>
+
+    <!-- Visualization 3: Livability Bar Chart (Altair) -->
+    <section id="viz3">
+        <h2>Does Livability Cost Extra?</h2>
+        <div class="viz-container">
+            <iframe src="altair_outputs/bar_livability.html"></iframe>
+        </div>
+        <p class="takeaway">
+            <strong>Key Insight:</strong> The most expensive towns (top 20) tend to have significantly 
+            higher walk, bike, and transit scores compared to the most affordable towns (bottom 20). 
+            This suggests that proximity to amenities and alternative transportation options does 
+            command a price premium in the Massachusetts housing market.
+        </p>
+    </section>
+
+    <!-- Visualization 4: Box Plot (D3) -->
+    <section id="viz4">
+        <h2>Price Distribution by Property Type</h2>
+        <div class="viz-container">
+            <div id="boxplot-container"></div>
+        </div>
+        <p class="takeaway">
+            <strong>Key Insight:</strong> Single-family homes show the widest price range and highest 
+            median prices. Condos cluster in a more moderate price range, while townhouses and 
+            multi-family properties show different distribution patterns. Toggle between price and 
+            price-per-square-foot to see how size factors into these differences.
+        </p>
+    </section>
+
+    <!-- Visualization 5: Risk Heatmap (Altair) -->
+    <section id="viz5">
+        <h2>Are Affordable Areas Riskier?</h2>
+        <div class="viz-container">
+            <iframe src="altair_outputs/heatmap_risk.html"></iframe>
+        </div>
+        <p class="takeaway">
+            <strong>Key Insight:</strong> Click on a town in the heatmap (left) to highlight it in 
+            the scatter plot (right). The relationship between environmental risk and housing price 
+            is complex—some high-price areas have elevated wind or air risks, while flood risk appears 
+            more evenly distributed. This visualization helps identify whether affordability comes at 
+            the cost of environmental vulnerability.
+        </p>
+    </section>
+
+    <!-- Visualization 6: Income vs Price (Altair) -->
+    <section id="viz6">
+        <h2>Income and Housing: The Affordability Gap</h2>
+        <div class="viz-container">
+            <iframe src="altair_outputs/scatter_income_price.html"></iframe>
+        </div>
+        <p class="takeaway">
+            <strong>Key Insight:</strong> There's a clear positive relationship between median household 
+            income and average housing prices across Massachusetts towns. However, the slope shows that 
+            housing prices often increase faster than incomes—many towns have price-to-income ratios 
+            exceeding 10x. Circle size represents population, and color indicates livability (darker = 
+            more walkable/bikeable). Zoom in to explore specific towns and their affordability challenges.
+        </p>
+    </section>
+
+    <!-- Conclusions -->
+    <section id="conclusions">
+        <h2>Conclusions</h2>
+        
+        <h3>Key Findings</h3>
+        <ul>
+            <li>
+                <strong>Geography Matters:</strong> Housing costs are heavily concentrated in certain areas,
+                with the Greater Boston region and affluent suburbs commanding premium prices.
+            </li>
+            <li>
+                <strong>Size is King:</strong> Square footage shows the strongest correlation with price,
+                though property type significantly modulates this relationship.
+            </li>
+            <li>
+                <strong>Livability Premium:</strong> Towns with high walkability, bikeability, and transit 
+                access scores consistently show higher housing costs—confirming that proximity to amenities 
+                is highly valued.
+            </li>
+            <li>
+                <strong>Affordability Crisis:</strong> Price-to-income ratios reveal a significant 
+                affordability gap. In many towns, average home prices exceed 10-15 times the median 
+                household income, making homeownership challenging for middle-income families.
+            </li>
+            <li>
+                <strong>Risk Distribution:</strong> Environmental risks are present across price ranges, 
+                but patterns vary by risk type. Coastal areas face flood risks, while inland regions 
+                show different profiles.
+            </li>
+        </ul>
+
+        <h3>Limitations & Future Work</h3>
+        <p>
+            This analysis uses synthetic Census data as a workaround for demonstration purposes. 
+            For production analysis, real Census API data should be integrated. Additionally, the 
+            geographic visualization uses an approximate layout rather than precise Massachusetts 
+            town boundaries—future work could incorporate TopoJSON geographic data for more accurate 
+            spatial representation.
+        </p>
+        <p>
+            Future enhancements could include:
+        </p>
+        <ul>
+            <li>Time-series analysis showing how prices have changed over time</li>
+            <li>Predictive modeling to estimate fair market values</li>
+            <li>Deeper analysis of school quality impacts on prices</li>
+            <li>Neighborhood-level granularity within major cities</li>
+            <li>Integration with mortgage rate data and affordability calculators</li>
+        </ul>
+    </section>
+
+    <!-- References -->
+    <section id="references">
+        <h2>References & Data Sources</h2>
+        <ul>
+            <li>
+                <strong>Housing Data:</strong> 
+                <a href="https://www.kaggle.com/datasets/vraj105/massachusetts-housing-data" target="_blank">
+                    Massachusetts Housing Data on Kaggle
+                </a>
+            </li>
+            <li>
+                <strong>Census Data:</strong> 
+                <a href="https://www.census.gov/data/developers/data-sets/acs-5year.html" target="_blank">
+                    US Census Bureau American Community Survey
+                </a>
+            </li>
+            <li>
+                <strong>Tools:</strong> D3.js v7, Altair/Vega-Lite, Python (pandas, requests)
+            </li>
+            <li>
+                <strong>Course:</strong> DS4200 Information Visualization
+            </li>
+        </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Massachusetts Housing Visualization Project</p>
+        <p>Created for DS4200 Information Visualization</p>
+        <p style="font-size: 0.9rem; margin-top: 1rem;">
+            Built with D3.js, Altair, and Python | 
+            <a href="https://github.com/YOUR_USERNAME/DS4200-Project" style="color: #F4845F;">View on GitHub</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/choropleth.js"></script>
+    <script src="js/boxplot.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

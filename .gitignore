@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment variables (API keys!)
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large data files (optional, if data > 10MB)
+# data/raw/*.csv
+
+# IDE
+.vscode/
+.idea/

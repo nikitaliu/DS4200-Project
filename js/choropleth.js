@@ -1,271 +1,282 @@
-// D3 Choropleth Map Alternative: City Bubbles on Map
-// Shows MA cities as circles colored by price metrics
-// (Simplified version that doesn't require exact TopoJSON boundaries)
-
 class ChoroplethMap {
     constructor(containerId) {
-        this.containerId = containerId;
-        this.margin = {top: 40, right: 30, bottom: 30, left: 30};
-        this.width = 900 - this.margin.left - this.margin.right;
-        this.height = 600 - this.margin.top - this.margin.bottom;
-        
-        this.currentMetric = 'avgPrice';
-    }
-    
-    async init() {
-        // Load and process data
-        const rawData = await d3.csv('data/processed/merged_data.csv', d => ({
-            city: d.city,
-            price: +d.price,
-            pricePerSqft: +d.pricePerSqft,
-            medianIncome: +d.medianIncome,
-            population: +d.population,
-            sqft: +d.sqft
-        }));
-        
-        // Aggregate by city
-        const cityMap = d3.rollup(rawData,
-            v => ({
-                avgPrice: d3.mean(v, d => d.price),
-                avgPricePerSqft: d3.mean(v, d => d.pricePerSqft),
-                medianIncome: v[0].medianIncome,
-                population: v[0].population,
-                count: v.length,
-                priceToIncome: d3.mean(v, d => d.price) / v[0].medianIncome
-            }),
-            d => d.city
-        );
-        
-        this.cityData = Array.from(cityMap, ([city, stats]) => ({
-            city,
-            ...stats
-        })).filter(d => d.city !== 'Unknown');
-        
-        // Create approximate geographic layout (simplified grid)
-        this.assignCoordinates();
-        
-        // Create SVG
-        this.svg = d3.select(`#${this.containerId}`)
-            .append('svg')
-            .attr('width', this.width + this.margin.left + this.margin.right)
-            .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
-        
-        // Add zoom
-        const zoom = d3.zoom()
-            .scaleExtent([0.8, 8])
-            .on('zoom', (event) => {
-                this.svg.attr('transform', event.transform);
-            });
-        
-        d3.select(`#${this.containerId} svg`).call(zoom);
-        
-        // Create tooltip
-        this.tooltip = d3.select('body')
-            .append('div')
-            .attr('class', 'map-tooltip')
-            .style('opacity', 0);
-        
-        // Add controls
-        this.addControls();
-        
-        // Draw
-        this.draw();
-    }
-    
-    assignCoordinates() {
-        // Assign approximate grid coordinates to cities
-        // In a real implementation, you would use actual lat/long
-        const cols = Math.ceil(Math.sqrt(this.cityData.length));
-        
-        // Sort cities by name for consistent layout
-        this.cityData.sort((a, b) => a.city.localeCompare(b.city));
-        
-        this.cityData.forEach((d, i) => {
-            d.x = (i % cols) * (this.width / cols) + (this.width / cols / 2);
-            d.y = Math.floor(i / cols) * (this.height / Math.ceil(this.cityData.length / cols)) + 20;
-        });
-        
-        // Add some jitter for visual interest
-        this.cityData.forEach(d => {
-            d.x += (Math.random() - 0.5) * 20;
-            d.y += (Math.random() - 0.5) * 20;
-        });
-    }
-    
-    addControls() {
-        const controls = d3.select(`#${this.containerId}`)
-            .insert('div', ':first-child')
-            .attr('class', 'chart-controls')
-            .style('margin-bottom', '15px');
-        
-        controls.append('label')
-            .text('Color by: ')
-            .style('font-weight', 'bold')
-            .style('margin-right', '10px');
-        
-        const select = controls.append('select')
-            .attr('class', 'metric-select')
-            .on('change', (event) => {
-                this.currentMetric = event.target.value;
-                this.draw();
-            });
-        
-        const options = [
-            {value: 'avgPrice', label: 'Average Price'},
-            {value: 'avgPricePerSqft', label: 'Price per Sqft'},
-            {value: 'priceToIncome', label: 'Price-to-Income Ratio'},
-            {value: 'medianIncome', label: 'Median Income'}
-        ];
-        
-        select.selectAll('option')
-            .data(options)
-            .enter()
-            .append('option')
-            .attr('value', d => d.value)
-            .text(d => d.label);
-        
-        controls.append('p')
-            .style('font-size', '12px')
-            .style('color', '#666')
-            .style('margin-top', '5px')
-            .text('💡 Hover over circles for details. Use mouse wheel to zoom.');
-    }
-    
-    draw() {
-        // Remove existing circles and legend
-        this.svg.selectAll('.city-circle').remove();
-        this.svg.selectAll('.legend').remove();
-        
-        // Get value extent for color scale
-        const values = this.cityData.map(d => d[this.currentMetric]);
-        const extent = d3.extent(values);
-        
-        // Color scale
-        const colorScale = d3.scaleQuantize()
-            .domain(extent)
-            .range(d3.schemeYlOrRd[7]);
-        
-        // Size scale based on population
-        const sizeScale = d3.scaleSqrt()
-            .domain(d3.extent(this.cityData, d => d.population))
-            .range([4, 20]);
-        
-        // Draw cities as circles
-        this.svg.selectAll('.city-circle')
-            .data(this.cityData)
-            .enter()
-            .append('circle')
-            .attr('class', 'city-circle')
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y)
-            .attr('r', d => sizeScale(d.population))
-            .attr('fill', d => colorScale(d[this.currentMetric]))
-            .attr('stroke', '#333')
-            .attr('stroke-width', 0.5)
-            .attr('opacity', 0.8)
-            .style('cursor', 'pointer')
-            .on('mouseover', (event, d) => {
-                d3.select(event.target)
-                    .attr('stroke-width', 2)
-                    .attr('opacity', 1);
-                
-                this.tooltip.transition().duration(200).style('opacity', 0.9);
-                this.tooltip.html(`
-                    <strong>${d.city}</strong><br/>
-                    Avg Price: $${d3.format(',.0f')(d.avgPrice)}<br/>
-                    Median Income: $${d3.format(',.0f')(d.medianIncome)}<br/>
-                    Listings: ${d.count}<br/>
-                    Price/Income: ${d.priceToIncome.toFixed(2)}x<br/>
-                    Population: ${d3.format(',.0f')(d.population)}
-                `)
-                .style('left', (event.pageX + 10) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
-            })
-            .on('mouseout', (event) => {
-                d3.select(event.target)
-                    .attr('stroke-width', 0.5)
-                    .attr('opacity', 0.8);
-                
-                this.tooltip.transition().duration(500).style('opacity', 0);
-            });
-        
-        // Add legend
-        this.addLegend(colorScale, extent);
-        
-        // Add title
-        this.svg.selectAll('.chart-title').remove();
-        this.svg.append('text')
-            .attr('class', 'chart-title')
-            .attr('x', this.width / 2)
-            .attr('y', -10)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '16px')
-            .style('font-weight', 'bold')
-            .text('Massachusetts Housing by City');
-    }
-    
-    addLegend(colorScale, extent) {
-        const legendWidth = 300;
-        const legendHeight = 15;
-        const legendX = this.width - legendWidth - 20;
-        const legendY = this.height - 40;
-        
-        const legend = this.svg.append('g')
-            .attr('class', 'legend')
-            .attr('transform', `translate(${legendX},${legendY})`);
-        
-        // Color gradient
-        const colorRange = colorScale.range();
-        const steps = colorRange.length;
-        const stepWidth = legendWidth / steps;
-        
-        legend.selectAll('rect')
-            .data(colorRange)
-            .enter()
-            .append('rect')
-            .attr('x', (d, i) => i * stepWidth)
-            .attr('y', 0)
-            .attr('width', stepWidth)
-            .attr('height', legendHeight)
-            .attr('fill', d => d);
-        
-        // Labels
-        const metricLabels = {
-            'avgPrice': 'Price',
-            'avgPricePerSqft': 'Price/Sqft',
-            'priceToIncome': 'Price-to-Income',
-            'medianIncome': 'Income'
+        this.container = d3.select(`#${containerId}`);
+        this.metric = "medianListingPrice";
+        this.width = 920;
+        this.height = 600;
+        this.margin = {top: 20, right: 24, bottom: 24, left: 24};
+        this.metricConfig = {
+            medianListingPrice: {
+                label: "Median Listing Price",
+                formatter: window.maUtils.formatCurrency,
+                interpolator: d3.interpolateYlOrRd,
+            },
+            priceToIncomeRatio: {
+                label: "Price-to-Income Ratio",
+                formatter: (value) => `${window.maUtils.formatNumber(value, 2)}x`,
+                interpolator: d3.interpolateBlues,
+            },
+            estimatedCapRate: {
+                label: "Estimated Cap Rate",
+                formatter: (value) => `${window.maUtils.formatNumber(value, 2)}%`,
+                interpolator: d3.interpolateGnBu,
+            },
+            environmentalRiskComposite: {
+                label: "Environmental Risk Composite",
+                formatter: (value) => window.maUtils.formatNumber(value, 2),
+                interpolator: d3.interpolateOrRd,
+            },
         };
-        
-        legend.append('text')
-            .attr('x', 0)
-            .attr('y', legendHeight + 15)
-            .style('font-size', '11px')
-            .text(d3.format('$,.0f')(extent[0]));
-        
-        legend.append('text')
-            .attr('x', legendWidth)
-            .attr('y', legendHeight + 15)
-            .attr('text-anchor', 'end')
-            .style('font-size', '11px')
-            .text(d3.format('$,.0f')(extent[1]));
-        
-        legend.append('text')
-            .attr('x', legendWidth / 2)
-            .attr('y', -5)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '12px')
-            .style('font-weight', 'bold')
-            .text(metricLabels[this.currentMetric]);
+    }
+
+    async init() {
+        const [topology, rows] = await Promise.all([
+            d3.json("data/ma_towns.topojson"),
+            d3.csv("data/town_summary.csv", (d) => ({
+                cityKey: d.cityKey,
+                town: d.town,
+                listingCount: +d.listingCount,
+                medianListingPrice: +d.medianListingPrice,
+                medianHouseholdIncome: +d.medianHouseholdIncome,
+                priceToIncomeRatio: +d.priceToIncomeRatio,
+                estimatedCapRate: +d.estimatedCapRate,
+                environmentalRiskComposite: +d.environmentalRiskComposite,
+                monthlyAffordabilityIndexTown: +d.monthlyAffordabilityIndexTown,
+            })),
+        ]);
+
+        const features = topojson.feature(topology, topology.objects.towns);
+        this.lookup = new Map(rows.map((row) => [row.cityKey, row]));
+        this.features = features.features.map((feature) => {
+            const townKey = window.maUtils.normalizeTownName(feature.properties.town);
+            return {
+                ...feature,
+                townKey,
+                summary: this.lookup.get(townKey),
+            };
+        });
+
+        const controls = this.container.append("div").attr("class", "chart-controls");
+        controls.append("label").attr("for", "map-metric-select").text("Color metric");
+        controls
+            .append("select")
+            .attr("id", "map-metric-select")
+            .selectAll("option")
+            .data([
+                ["medianListingPrice", "Median Listing Price"],
+                ["priceToIncomeRatio", "Price-to-Income Ratio"],
+                ["estimatedCapRate", "Estimated Cap Rate"],
+                ["environmentalRiskComposite", "Environmental Risk Composite"],
+            ])
+            .join("option")
+            .attr("value", (d) => d[0])
+            .text((d) => d[1]);
+
+        controls
+            .select("select")
+            .on("change", (event) => {
+                this.metric = event.target.value;
+                this.render();
+            });
+
+        controls
+            .append("button")
+            .attr("type", "button")
+            .text("Reset zoom")
+            .on("click", () => this.resetZoom());
+
+        this.status = this.container.append("div").attr("class", "map-status");
+
+        this.svg = this.container
+            .append("svg")
+            .attr("viewBox", `0 0 ${this.width} ${this.height}`)
+            .attr("role", "img")
+            .attr("aria-label", "Massachusetts housing choropleth map");
+
+        this.root = this.svg.append("g");
+
+        this.tooltip = this.container.append("div").attr("class", "map-tooltip");
+
+        this.projection = d3.geoIdentity().reflectY(true).fitSize(
+            [this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom],
+            features
+        );
+        this.path = d3.geoPath(this.projection);
+
+        this.zoomBehavior = d3
+            .zoom()
+            .scaleExtent([1, 7])
+            .translateExtent([
+                [0, 0],
+                [this.width, this.height],
+            ])
+            .on("zoom", (event) => this.root.attr("transform", event.transform));
+
+        this.svg.call(this.zoomBehavior);
+        this.render();
+    }
+
+    getScale() {
+        const values = this.features
+            .map((feature) => feature.summary?.[this.metric])
+            .filter((value) => Number.isFinite(value));
+
+        const domain = d3.extent(values);
+        return d3.scaleSequential(this.metricConfig[this.metric].interpolator).domain(domain);
+    }
+
+    renderLegend(scale) {
+        this.svg.selectAll(".map-legend").remove();
+        const legend = this.svg.append("g").attr("class", "map-legend").attr("transform", "translate(620,530)");
+        const legendWidth = 220;
+        const legendHeight = 12;
+        const gradientId = `map-gradient-${this.metric}`;
+        const defs = this.svg.append("defs");
+        const gradient = defs
+            .append("linearGradient")
+            .attr("id", gradientId)
+            .attr("x1", "0%")
+            .attr("x2", "100%")
+            .attr("y1", "0%")
+            .attr("y2", "0%");
+
+        d3.range(0, 1.01, 0.1).forEach((stop) => {
+            gradient
+                .append("stop")
+                .attr("offset", `${stop * 100}%`)
+                .attr("stop-color", scale(scale.domain()[0] + stop * (scale.domain()[1] - scale.domain()[0])));
+        });
+
+        legend
+            .append("text")
+            .attr("x", 0)
+            .attr("y", -10)
+            .attr("class", "legend-label")
+            .text(this.metricConfig[this.metric].label);
+
+        legend
+            .append("rect")
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
+            .attr("rx", 999)
+            .attr("fill", `url(#${gradientId})`);
+
+        const [min, max] = scale.domain();
+        legend
+            .append("text")
+            .attr("x", 0)
+            .attr("y", 28)
+            .attr("class", "legend-label")
+            .text(this.metricConfig[this.metric].formatter(min));
+
+        legend
+            .append("text")
+            .attr("x", legendWidth)
+            .attr("y", 28)
+            .attr("text-anchor", "end")
+            .attr("class", "legend-label")
+            .text(this.metricConfig[this.metric].formatter(max));
+    }
+
+    render() {
+        const scale = this.getScale();
+        const formatMetric = this.metricConfig[this.metric].formatter;
+        const covered = this.features.filter((feature) => feature.summary).length;
+        this.status.text(`${covered} of ${this.features.length} municipalities have listing data in the cleaned sample.`);
+
+        const towns = this.root.selectAll(".town-shape").data(this.features, (d) => d.id);
+
+        towns
+            .join(
+                (enter) =>
+                    enter
+                        .append("path")
+                        .attr("class", "town-shape")
+                        .attr("d", this.path)
+                        .attr("fill", "#d9e2ec")
+                        .attr("stroke", "rgba(16, 35, 63, 0.25)")
+                        .attr("stroke-width", 0.8)
+                        .on("mousemove", (event, feature) => this.showTooltip(event, feature, formatMetric))
+                        .on("mouseleave", () => this.hideTooltip())
+                        .on("click", (event, feature) => this.zoomToFeature(feature))
+                        .call((enterSelection) =>
+                            enterSelection
+                                .transition()
+                                .duration(650)
+                                .attr("fill", (feature) =>
+                                    feature.summary ? scale(feature.summary[this.metric]) : "#d9e2ec"
+                                )
+                        ),
+                (update) =>
+                    update
+                        .transition()
+                        .duration(500)
+                        .attr("fill", (feature) =>
+                            feature.summary ? scale(feature.summary[this.metric]) : "#d9e2ec"
+                        ),
+            );
+
+        this.renderLegend(scale);
+    }
+
+    showTooltip(event, feature, formatMetric) {
+        const summary = feature.summary;
+        const html = summary
+            ? `
+                <strong>${summary.town}</strong>
+                <div>${this.metricConfig[this.metric].label}: ${formatMetric(summary[this.metric])}</div>
+                <div>Median income: ${window.maUtils.formatCurrency(summary.medianHouseholdIncome)}</div>
+                <div>Price-to-income: ${window.maUtils.formatNumber(summary.priceToIncomeRatio, 2)}x</div>
+                <div>Listings: ${summary.listingCount.toLocaleString("en-US")}</div>
+            `
+            : `
+                <strong>${window.maUtils.titleCase(feature.properties.town)}</strong>
+                <div>No cleaned listing sample for this municipality.</div>
+            `;
+
+        this.tooltip
+            .style("opacity", 1)
+            .style("left", `${event.offsetX + 16}px`)
+            .style("top", `${event.offsetY + 16}px`)
+            .html(html);
+    }
+
+    hideTooltip() {
+        this.tooltip.style("opacity", 0);
+    }
+
+    zoomToFeature(feature) {
+        const [[x0, y0], [x1, y1]] = this.path.bounds(feature);
+        const dx = x1 - x0;
+        const dy = y1 - y0;
+        const x = (x0 + x1) / 2;
+        const y = (y0 + y1) / 2;
+        const scale = Math.max(
+            1,
+            Math.min(7, 0.9 / Math.max(dx / this.width, dy / this.height))
+        );
+        const translate = [
+            this.width / 2 - scale * x,
+            this.height / 2 - scale * y,
+        ];
+
+        this.svg
+            .transition()
+            .duration(750)
+            .call(
+                this.zoomBehavior.transform,
+                d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+            );
+    }
+
+    resetZoom() {
+        this.svg.transition().duration(650).call(this.zoomBehavior.transform, d3.zoomIdentity);
     }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('choropleth-container')) {
-        const map = new ChoroplethMap('choropleth-container');
-        map.init();
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("choropleth-container");
+    if (container) {
+        new ChoroplethMap("choropleth-container").init();
     }
 });

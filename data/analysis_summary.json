@@ -1,0 +1,159 @@
+{
+  "listingCount": 8726,
+  "townCount": 341,
+  "listingLabelCount": 428,
+  "statewideMedianPrice": 725000.0,
+  "statewideMeanPrice": 1115240.1713270685,
+  "top10TownsByMedianPrice": [
+    {
+      "town": "Edgartown",
+      "medianListingPrice": 9250000.0,
+      "listingCount": 1
+    },
+    {
+      "town": "Nantucket",
+      "medianListingPrice": 3985000.0,
+      "listingCount": 126
+    },
+    {
+      "town": "Chilmark",
+      "medianListingPrice": 3352500.0,
+      "listingCount": 2
+    },
+    {
+      "town": "Dover",
+      "medianListingPrice": 3041500.0,
+      "listingCount": 24
+    },
+    {
+      "town": "Wellesley",
+      "medianListingPrice": 2597450.0,
+      "listingCount": 56
+    },
+    {
+      "town": "Lexington",
+      "medianListingPrice": 2399000.0,
+      "listingCount": 53
+    },
+    {
+      "town": "Manchester-by-the-Sea",
+      "medianListingPrice": 2395000.0,
+      "listingCount": 11
+    },
+    {
+      "town": "Needham",
+      "medianListingPrice": 2370000.0,
+      "listingCount": 52
+    },
+    {
+      "town": "Chatham",
+      "medianListingPrice": 2225000.0,
+      "listingCount": 32
+    },
+    {
+      "town": "Orleans",
+      "medianListingPrice": 1975000.0,
+      "listingCount": 25
+    }
+  ],
+  "bottom10TownsByMedianPrice": [
+    {
+      "town": "Drury",
+      "medianListingPrice": 59000.0,
+      "listingCount": 1
+    },
+    {
+      "town": "Granville",
+      "medianListingPrice": 79900.0,
+      "listingCount": 10
+    },
+    {
+      "town": "Huntington",
+      "medianListingPrice": 81900.0,
+      "listingCount": 3
+    },
+    {
+      "town": "Whately",
+      "medianListingPrice": 135000.0,
+      "listingCount": 3
+    },
+    {
+      "town": "Blandford",
+      "medianListingPrice": 139900.0,
+      "listingCount": 9
+    },
+    {
+      "town": "Brimfield",
+      "medianListingPrice": 152449.5,
+      "listingCount": 24
+    },
+    {
+      "town": "Montgomery",
+      "medianListingPrice": 160000.0,
+      "listingCount": 1
+    },
+    {
+      "town": "Royalston",
+      "medianListingPrice": 179900.0,
+      "listingCount": 1
+    },
+    {
+      "town": "Monroe",
+      "medianListingPrice": 182000.0,
+      "listingCount": 4
+    },
+    {
+      "town": "Tyringham",
+      "medianListingPrice": 185000.0,
+      "listingCount": 7
+    }
+  ],
+  "incomeCoverageTownCount": 328,
+  "unaffordableTownCount": 11,
+  "priceToIncomeMaxTown": [
+    {
+      "town": "Edgartown",
+      "priceToIncomeRatio": 103.1100211793557
+    }
+  ],
+  "priceToIncomeMinTown": [
+    {
+      "town": "Huntington",
+      "priceToIncomeRatio": 0.8632775031358371
+    }
+  ],
+  "environmentalRiskPriceCorrelation": 0.12725928359106733,
+  "topPositivePriceCorrelations": [
+    {
+      "variable": "bathrooms",
+      "correlation": 0.643346507128456
+    },
+    {
+      "variable": "sqft",
+      "correlation": 0.619459349842798
+    },
+    {
+      "variable": "priceToIncomeRatio",
+      "correlation": 0.5028081390448834
+    }
+  ],
+  "topNegativePriceCorrelations": [
+    {
+      "variable": "walkScore",
+      "correlation": 0.014501585995874573
+    },
+    {
+      "variable": "ageOfHome",
+      "correlation": -0.06785578594250993
+    },
+    {
+      "variable": "fireRisk",
+      "correlation": -0.1179648498368888
+    }
+  ],
+  "sensitivityByOneStdDev": {
+    "sqft": 828231.2797021061,
+    "livabilityComposite": 166136.04745024134,
+    "environmentalRiskComposite": 175660.7892701073
+  }
+}

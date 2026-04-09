@@ -1,128 +1,30 @@
-# 🚀 快速启动指南
+# Quick Start
 
-## 本地查看项目
-
-### 最简单的方法（Mac）
-
-1. **打开终端**（Terminal）
-2. **运行启动脚本**：
-   ```bash
-   cd /Users/mac/Documents/GitHub/DS4200-Project
-   ./start_server.sh
-   ```
-3. **在浏览器打开**：http://localhost:8080
-
-### 或者手动启动
+## Local preview
 
 ```bash
 cd /Users/mac/Documents/GitHub/DS4200-Project
-python3 -m http.server 8080
-```
-
-浏览器访问：http://localhost:8080
-
----
-
-## 🌐 在线查看（GitHub Pages）
-
-你的项目已经推送到 GitHub！现在需要启用 GitHub Pages：
-
-### 步骤：
-
-1. **访问仓库设置**  
-   https://github.com/nikitaliu/DS4200-Project/settings/pages
-
-2. **配置部署**
-   - Source: 选择 **Deploy from a branch**
-   - Branch: 选择 **main**
-   - Folder: 选择 **/ (root)**
-   - 点击 **Save**
-
-3. **等待 1-2 分钟**  
-   GitHub 会自动构建和部署
-
-4. **访问你的在线网站**  
-   https://nikitaliu.github.io/DS4200-Project/
-
----
-
-## 🎯 测试清单
-
-访问网站后，检查这些功能是否正常：
-
-### 顶部导航
-- [ ] 点击导航链接可以平滑滚动到对应部分
-
-### 6个可视化
-- [ ] **Visualization 1**: 城市地图可以缩放和拖动
-- [ ] **Visualization 2**: Altair 散点图可以交互（悬停显示信息）
-- [ ] **Visualization 3**: 柱状图正常显示
-- [ ] **Visualization 4**: 箱线图可以切换指标和对数尺度
-- [ ] **Visualization 5**: 热力图和散点图可以点击联动
-- [ ] **Visualization 6**: 收入 vs 价格散点图可以缩放
-
-### 交互功能
-- [ ] 悬停在元素上显示 tooltip（提示信息）
-- [ ] 下拉菜单可以切换指标
-- [ ] 按钮可以切换视图
-- [ ] 滚动到底部后出现"返回顶部"按钮
-
----
-
-## 🐛 常见问题
-
-### 1. 端口被占用
-如果 8080 端口被占用，换一个端口：
-```bash
-python3 -m http.server 3000  # 使用 3000 端口
-# 然后访问 http://localhost:3000
-```
-
-### 2. 图表不显示
-- 确保你在项目根目录下启动服务器
-- 检查 `data/processed/` 文件夹有 CSV 文件
-- 检查 `altair_outputs/` 文件夹有 HTML 文件
-- 打开浏览器控制台（F12）查看错误信息
-
-### 3. 数据文件缺失
-重新运行数据管道：
-```bash
 source venv/bin/activate
-python python/01_clean_kaggle_data.py
-python python/02_fetch_census_api_SYNTHETIC.py
-python python/03_merge_datasets.py
-python python/04_generate_altair_charts.py
+python python/fetch_census.py
+python python/data_cleaning.py
+python python/generate_altair.py
+python python/generate_design_doc.py
+python -m http.server 8080
 ```
 
----
+Open `http://localhost:8080`.
 
-## 📂 项目结构
+## Core outputs to check
 
-```
-DS4200-Project/
-├── index.html              ← 主页面
-├── css/style.css           ← 样式
-├── js/                     ← JavaScript 文件
-│   ├── choropleth.js       ← 地图可视化
-│   ├── boxplot.js          ← 箱线图
-│   └── main.js             ← 主脚本
-├── altair_outputs/         ← Altair 生成的图表
-├── data/                   ← 数据文件
-│   ├── raw/                ← 原始数据
-│   └── processed/          ← 处理后的数据
-├── python/                 ← Python 脚本
-├── start_server.sh         ← 启动脚本
-└── README.md               ← 项目文档
-```
+- `data/ma_housing_cleaned.csv`
+- `data/town_summary.csv`
+- `data/analysis_summary.json`
+- `data/ma_towns.topojson`
+- `altair_charts/`
+- `design_document.docx`
 
----
+## GitHub Pages target
 
-## 💡 提示
+`https://nikitaliu.github.io/DS4200-Project/`
 
-- **本地开发**：使用 `localhost:8080` 快速测试
-- **在线分享**：启用 GitHub Pages 后获得永久链接
-- **更新代码**：修改后 `git push`，GitHub Pages 会自动更新
-
----
-
-**开始探索你的可视化项目吧！🎉**
+Enable Pages from the `main` branch root directory in repository settings if it is not already active.

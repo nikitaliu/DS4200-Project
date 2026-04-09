@@ -1,285 +1,224 @@
-// D3 Box Plot: Price Distribution by Property Type
-// Shows price distribution for each property type with outliers
-
-class BoxPlot {
+class PropertyTypeBoxPlot {
     constructor(containerId) {
-        this.containerId = containerId;
-        this.margin = {top: 40, right: 30, bottom: 80, left: 80};
-        this.width = 700 - this.margin.left - this.margin.right;
-        this.height = 450 - this.margin.top - this.margin.bottom;
-        
-        // Property type colors
+        this.container = d3.select(`#${containerId}`);
+        this.width = 880;
+        this.height = 520;
+        this.margin = {top: 36, right: 24, bottom: 90, left: 86};
         this.colors = {
-            'Single Family': '#3A7CA5',
-            'Condo': '#F4845F',
-            'Townhouse': '#2ECC71',
-            'Multi Family': '#9B59B6'
+            "Single Family": "#2b6cb0",
+            Condo: "#e53e3e",
+            Townhouse: "#38a169",
+            "Multi Family": "#d69e2e",
         };
-        
-        this.useLogScale = false;
-        this.currentMetric = 'price';
     }
-    
+
     async init() {
-        // Load data
-        const data = await d3.csv('data/processed/merged_data.csv', d => ({
-            price: +d.price,
-            pricePerSqft: +d.pricePerSqft,
+        const rows = await d3.csv("data/ma_housing_cleaned.csv", (d) => ({
             propertyType: d.propertyType,
+            price: +d.price,
+            address: d.address,
             city: d.city,
             sqft: +d.sqft,
-            bedrooms: +d.bedrooms
+            bedrooms: +d.bedrooms,
         }));
-        
-        this.data = data.filter(d => d.propertyType && d.price > 0);
-        
-        // Create SVG
-        this.svg = d3.select(`#${this.containerId}`)
-            .append('svg')
-            .attr('width', this.width + this.margin.left + this.margin.right)
-            .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
-        
-        // Create tooltip
-        this.tooltip = d3.select('body')
-            .append('div')
-            .attr('class', 'map-tooltip')
-            .style('opacity', 0);
-        
-        // Add controls
-        this.addControls();
-        
-        // Draw initial chart
-        this.draw();
+
+        this.data = rows.filter((row) => row.propertyType && Number.isFinite(row.price));
+        this.tooltip = this.container.append("div").attr("class", "map-tooltip");
+        this.detailCard = this.container
+            .append("div")
+            .attr("class", "detail-card empty")
+            .html("<h3>Outlier details</h3><p>Click an outlier point to inspect the underlying listing.</p>");
+
+        this.svg = this.container
+            .append("svg")
+            .attr("viewBox", `0 0 ${this.width} ${this.height}`)
+            .attr("role", "img")
+            .attr("aria-label", "Box plot of listing price by property type");
+
+        this.plot = this.svg
+            .append("g")
+            .attr("transform", `translate(${this.margin.left},${this.margin.top})`);
+
+        this.render();
     }
-    
-    addControls() {
-        const controls = d3.select(`#${this.containerId}`)
-            .insert('div', ':first-child')
-            .attr('class', 'chart-controls')
-            .style('margin-bottom', '15px');
-        
-        // Toggle button for metric
-        controls.append('button')
-            .attr('class', 'control-button')
-            .text('Switch to Price per Sqft')
-            .on('click', () => {
-                this.currentMetric = this.currentMetric === 'price' ? 'pricePerSqft' : 'price';
-                d3.select('.control-button:first-child')
-                    .text(this.currentMetric === 'price' ? 'Switch to Price per Sqft' : 'Switch to Price');
-                this.draw();
-            });
-        
-        // Log scale toggle
-        controls.append('button')
-            .attr('class', 'control-button')
-            .style('margin-left', '10px')
-            .text('Toggle Log Scale')
-            .on('click', () => {
-                this.useLogScale = !this.useLogScale;
-                this.draw();
-            });
-    }
-    
-    calculateBoxStats(values) {
-        const sorted = values.sort(d3.ascending);
-        const q1 = d3.quantile(sorted, 0.25);
-        const median = d3.quantile(sorted, 0.5);
-        const q3 = d3.quantile(sorted, 0.75);
+
+    computeStats(type) {
+        const items = this.data
+            .filter((row) => row.propertyType === type)
+            .sort((a, b) => d3.ascending(a.price, b.price));
+        const values = items.map((row) => row.price);
+        const q1 = d3.quantile(values, 0.25);
+        const median = d3.quantile(values, 0.5);
+        const q3 = d3.quantile(values, 0.75);
         const iqr = q3 - q1;
-        const min = q1 - 1.5 * iqr;
-        const max = q3 + 1.5 * iqr;
-        
-        return {
-            q1,
-            median,
-            q3,
-            iqr,
-            min: Math.max(d3.min(sorted), min),
-            max: Math.min(d3.max(sorted), max),
-            outliers: sorted.filter(d => d < min || d > max)
-        };
+        const whiskerMin = Math.max(d3.min(values), q1 - 1.5 * iqr);
+        const whiskerMax = Math.min(d3.max(values), q3 + 1.5 * iqr);
+        const outliers = items.filter((row) => row.price < whiskerMin || row.price > whiskerMax);
+
+        return {type, items, values, q1, median, q3, whiskerMin, whiskerMax, outliers};
     }
-    
-    draw() {
-        // Clear existing elements
-        this.svg.selectAll('*').remove();
-        
-        // Get unique property types
-        const propertyTypes = Array.from(new Set(this.data.map(d => d.propertyType)))
-            .filter(d => d);
-        
-        // Calculate box plot statistics for each type
-        const boxData = propertyTypes.map(type => {
-            const typeData = this.data.filter(d => d.propertyType === type);
-            const values = typeData.map(d => d[this.currentMetric]).filter(v => v > 0 && !isNaN(v));
-            const stats = this.calculateBoxStats(values);
-            
-            return {
-                type,
-                stats,
-                data: typeData,
-                count: values.length
-            };
+
+    render() {
+        const plotWidth = this.width - this.margin.left - this.margin.right;
+        const plotHeight = this.height - this.margin.top - this.margin.bottom;
+        const types = Array.from(new Set(this.data.map((row) => row.propertyType)));
+        const stats = types.map((type) => this.computeStats(type)).sort((a, b) => d3.descending(a.median, b.median));
+
+        const x = d3.scaleBand().domain(stats.map((d) => d.type)).range([0, plotWidth]).padding(0.28);
+        const y = d3
+            .scaleLinear()
+            .domain([0, d3.max(stats, (d) => d.whiskerMax)])
+            .nice()
+            .range([plotHeight, 0]);
+
+        this.plot.selectAll("*").remove();
+
+        this.plot
+            .append("g")
+            .attr("transform", `translate(0,${plotHeight})`)
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .attr("transform", "rotate(-18)")
+            .style("text-anchor", "end");
+
+        this.plot
+            .append("g")
+            .call(d3.axisLeft(y).tickFormat((d) => window.maUtils.formatShortCurrency(d)))
+            .call((g) => g.select(".domain").remove())
+            .call((g) =>
+                g
+                    .selectAll(".tick line")
+                    .clone()
+                    .attr("x2", plotWidth)
+                    .attr("stroke-opacity", 0.08)
+            );
+
+        this.plot
+            .append("text")
+            .attr("x", -plotHeight / 2)
+            .attr("y", -58)
+            .attr("transform", "rotate(-90)")
+            .attr("fill", "#1a365d")
+            .attr("font-weight", 700)
+            .text("Listing Price");
+
+        const groups = this.plot
+            .selectAll(".box-group")
+            .data(stats)
+            .join("g")
+            .attr("class", "box-group")
+            .attr("transform", (d) => `translate(${x(d.type)},0)`);
+
+        groups
+            .append("line")
+            .attr("x1", x.bandwidth() / 2)
+            .attr("x2", x.bandwidth() / 2)
+            .attr("y1", (d) => y(d.whiskerMin))
+            .attr("y2", (d) => y(d.whiskerMax))
+            .attr("stroke", "#475569")
+            .attr("stroke-width", 1.2);
+
+        groups
+            .append("line")
+            .attr("x1", x.bandwidth() * 0.25)
+            .attr("x2", x.bandwidth() * 0.75)
+            .attr("y1", (d) => y(d.whiskerMin))
+            .attr("y2", (d) => y(d.whiskerMin))
+            .attr("stroke", "#475569");
+
+        groups
+            .append("line")
+            .attr("x1", x.bandwidth() * 0.25)
+            .attr("x2", x.bandwidth() * 0.75)
+            .attr("y1", (d) => y(d.whiskerMax))
+            .attr("y2", (d) => y(d.whiskerMax))
+            .attr("stroke", "#475569");
+
+        groups
+            .append("rect")
+            .attr("x", 0)
+            .attr("width", x.bandwidth())
+            .attr("y", (d) => y(d.median))
+            .attr("height", 0)
+            .attr("rx", 14)
+            .attr("fill", (d) => this.colors[d.type] || "#2b6cb0")
+            .attr("fill-opacity", 0.84)
+            .attr("stroke", "#16324f")
+            .on("mousemove", (event, d) => this.showStatsTooltip(event, d))
+            .on("mouseleave", () => this.tooltip.style("opacity", 0))
+            .transition()
+            .duration(900)
+            .attr("y", (d) => y(d.q3))
+            .attr("height", (d) => y(d.q1) - y(d.q3));
+
+        groups
+            .append("line")
+            .attr("x1", 0)
+            .attr("x2", x.bandwidth())
+            .attr("y1", (d) => y(d.median))
+            .attr("y2", (d) => y(d.median))
+            .attr("stroke", "#ffffff")
+            .attr("stroke-width", 2.2);
+
+        groups.each((d, index, nodes) => {
+            d3.select(nodes[index])
+                .selectAll(".outlier")
+                .data(d.outliers)
+                .join("circle")
+                .attr("class", "outlier")
+                .attr("cx", () => x.bandwidth() / 2 + (Math.random() - 0.5) * x.bandwidth() * 0.32)
+                .attr("cy", (row) => y(row.price))
+                .attr("r", 0)
+                .attr("fill", this.colors[d.type] || "#2b6cb0")
+                .attr("fill-opacity", 0.72)
+                .attr("stroke", "#16324f")
+                .attr("stroke-width", 0.7)
+                .on("mousemove", (event, row) =>
+                    this.tooltip
+                        .style("opacity", 1)
+                        .style("left", `${event.offsetX + 16}px`)
+                        .style("top", `${event.offsetY + 12}px`)
+                        .html(
+                            `<strong>${row.city}</strong><div>${window.maUtils.formatCurrency(row.price)}</div><div>${window.maUtils.formatNumber(row.sqft, 0)} sqft</div>`
+                        )
+                )
+                .on("mouseleave", () => this.tooltip.style("opacity", 0))
+                .on("click", (_, row) => this.showOutlierDetails(row))
+                .transition()
+                .delay(300)
+                .duration(700)
+                .attr("r", 3.6);
         });
-        
-        // Scales
-        const x = d3.scaleBand()
-            .domain(propertyTypes)
-            .range([0, this.width])
-            .padding(0.3);
-        
-        const yValues = boxData.flatMap(d => [d.stats.min, d.stats.max]);
-        
-        let y;
-        if (this.useLogScale) {
-            y = d3.scaleLog()
-                .domain([d3.min(yValues), d3.max(yValues)])
-                .range([this.height, 0])
-                .nice();
-        } else {
-            y = d3.scaleLinear()
-                .domain([0, d3.max(yValues)])
-                .range([this.height, 0])
-                .nice();
-        }
-        
-        // Draw boxes
-        const boxes = this.svg.selectAll('.box')
-            .data(boxData)
-            .enter()
-            .append('g')
-            .attr('class', 'box')
-            .attr('transform', d => `translate(${x(d.type)},0)`);
-        
-        // Vertical lines (whiskers)
-        boxes.append('line')
-            .attr('x1', x.bandwidth() / 2)
-            .attr('x2', x.bandwidth() / 2)
-            .attr('y1', d => y(d.stats.min))
-            .attr('y2', d => y(d.stats.max))
-            .attr('stroke', 'black')
-            .attr('stroke-width', 1);
-        
-        // Boxes
-        boxes.append('rect')
-            .attr('x', 0)
-            .attr('y', d => y(d.stats.q3))
-            .attr('width', x.bandwidth())
-            .attr('height', d => y(d.stats.q1) - y(d.stats.q3))
-            .attr('fill', d => this.colors[d.type] || '#999')
-            .attr('stroke', 'black')
-            .attr('stroke-width', 1)
-            .style('cursor', 'pointer')
-            .on('mouseover', (event, d) => {
-                this.tooltip.transition().duration(200).style('opacity', 0.9);
-                this.tooltip.html(`
-                    <strong>${d.type}</strong><br/>
-                    Count: ${d.count}<br/>
-                    Median: $${d3.format(',.0f')(d.stats.median)}<br/>
-                    Q1: $${d3.format(',.0f')(d.stats.q1)}<br/>
-                    Q3: $${d3.format(',.0f')(d.stats.q3)}
-                `)
-                .style('left', (event.pageX + 10) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
-            })
-            .on('mouseout', () => {
-                this.tooltip.transition().duration(500).style('opacity', 0);
-            });
-        
-        // Median lines
-        boxes.append('line')
-            .attr('x1', 0)
-            .attr('x2', x.bandwidth())
-            .attr('y1', d => y(d.stats.median))
-            .attr('y2', d => y(d.stats.median))
-            .attr('stroke', 'white')
-            .attr('stroke-width', 2);
-        
-        // Whisker caps
-        [d => d.stats.min, d => d.stats.max].forEach(accessor => {
-            boxes.append('line')
-                .attr('x1', x.bandwidth() * 0.25)
-                .attr('x2', x.bandwidth() * 0.75)
-                .attr('y1', d => y(accessor(d)))
-                .attr('y2', d => y(accessor(d)))
-                .attr('stroke', 'black')
-                .attr('stroke-width', 1);
-        });
-        
-        // Outliers
-        boxData.forEach(d => {
-            const outlierData = d.data.filter(item => {
-                const val = item[this.currentMetric];
-                return val < d.stats.min || val > d.stats.max;
-            });
-            
-            this.svg.selectAll(`.outlier-${d.type}`)
-                .data(outlierData)
-                .enter()
-                .append('circle')
-                .attr('cx', x(d.type) + x.bandwidth() / 2)
-                .attr('cy', item => y(item[this.currentMetric]))
-                .attr('r', 3)
-                .attr('fill', this.colors[d.type] || '#999')
-                .attr('opacity', 0.5)
-                .style('cursor', 'pointer')
-                .on('mouseover', (event, item) => {
-                    this.tooltip.transition().duration(200).style('opacity', 0.9);
-                    this.tooltip.html(`
-                        <strong>${item.city}</strong><br/>
-                        ${this.currentMetric === 'price' ? 'Price' : 'Price/Sqft'}: $${d3.format(',.0f')(item[this.currentMetric])}<br/>
-                        Beds: ${item.bedrooms}<br/>
-                        Sqft: ${d3.format(',.0f')(item.sqft)}
-                    `)
-                    .style('left', (event.pageX + 10) + 'px')
-                    .style('top', (event.pageY - 28) + 'px');
-                })
-                .on('mouseout', () => {
-                    this.tooltip.transition().duration(500).style('opacity', 0);
-                });
-        });
-        
-        // Axes
-        const xAxis = d3.axisBottom(x);
-        const yLabel = this.currentMetric === 'price' ? 'Price ($)' : 'Price per Sqft ($)';
-        const yAxis = d3.axisLeft(y)
-            .ticks(this.useLogScale ? 10 : 8)
-            .tickFormat(d3.format('$,.0f'));
-        
-        this.svg.append('g')
-            .attr('transform', `translate(0,${this.height})`)
-            .call(xAxis)
-            .selectAll('text')
-            .attr('transform', 'rotate(-15)')
-            .style('text-anchor', 'end');
-        
-        this.svg.append('g')
-            .call(yAxis);
-        
-        // Labels
-        this.svg.append('text')
-            .attr('x', this.width / 2)
-            .attr('y', -10)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '16px')
-            .style('font-weight', 'bold')
-            .text(`Price Distribution by Property Type ${this.useLogScale ? '(Log Scale)' : ''}`);
-        
-        this.svg.append('text')
-            .attr('transform', 'rotate(-90)')
-            .attr('x', -this.height / 2)
-            .attr('y', -50)
-            .attr('text-anchor', 'middle')
-            .text(yLabel);
+    }
+
+    showStatsTooltip(event, stats) {
+        this.tooltip
+            .style("opacity", 1)
+            .style("left", `${event.offsetX + 16}px`)
+            .style("top", `${event.offsetY + 12}px`)
+            .html(`
+                <strong>${stats.type}</strong>
+                <div>Median: ${window.maUtils.formatCurrency(stats.median)}</div>
+                <div>Q1 to Q3: ${window.maUtils.formatCurrency(stats.q1)} to ${window.maUtils.formatCurrency(stats.q3)}</div>
+                <div>Whiskers: ${window.maUtils.formatCurrency(stats.whiskerMin)} to ${window.maUtils.formatCurrency(stats.whiskerMax)}</div>
+                <div>Listings: ${stats.items.length.toLocaleString("en-US")}</div>
+            `);
+    }
+
+    showOutlierDetails(row) {
+        this.detailCard
+            .classed("empty", false)
+            .html(`
+                <h3>Selected outlier</h3>
+                <p><strong>${row.address || `${row.city}, MA`}</strong></p>
+                <p>${row.propertyType} listed at ${window.maUtils.formatCurrency(row.price)} with ${window.maUtils.formatNumber(row.sqft, 0)} sqft and ${window.maUtils.formatNumber(row.bedrooms, 0)} bedrooms.</p>
+            `);
     }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('boxplot-container')) {
-        const boxplot = new BoxPlot('boxplot-container');
-        boxplot.init();
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("boxplot-container");
+    if (container) {
+        new PropertyTypeBoxPlot("boxplot-container").init();
     }
 });

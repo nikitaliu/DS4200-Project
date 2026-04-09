@@ -1,0 +1,353 @@
+town,townKey,medianHouseholdIncome,population
+County subdivisions not defined,county subdivisions not defined,-666666666,0
+Barnstable Town,barnstable,97348,49232
+Bourne,bourne,95349,20093
+Brewster,brewster,94798,10367
+Chatham,chatham,86674,6643
+Dennis,dennis,88183,14803
+Eastham,eastham,72683,5772
+Falmouth,falmouth,92862,32841
+Harwich,harwich,87948,13506
+Mashpee,mashpee,95852,15234
+Orleans,orleans,98798,6342
+Provincetown,provincetown,104500,3681
+Sandwich,sandwich,118799,20422
+Truro,truro,94637,1675
+Wellfleet,wellfleet,114074,4371
+Yarmouth,yarmouth,81985,25091
+Adams,adams,56285,8106
+Alford,alford,122292,389
+Becket,becket,75625,2049
+Cheshire,cheshire,72028,3234
+Clarksburg,clarksburg,78421,1723
+Dalton,dalton,81168,6304
+Egremont,egremont,97500,1232
+Florida,florida,90078,774
+Great Barrington,great barrington,82484,7184
+Hancock,hancock,93125,798
+Hinsdale,hinsdale,76129,1825
+Lanesborough,lanesborough,84419,3033
+Lee,lee,74222,5751
+Lenox,lenox,97569,5076
+Monterey,monterey,131111,1030
+Mount Washington,mount washington,127813,191
+New Ashford,new ashford,81500,244
+New Marlborough,new marlborough,94038,1675
+North Adams,north adams,48521,12660
+Otis,otis,104089,1678
+Peru,peru,83125,631
+Pittsfield,pittsfield,68386,43559
+Richmond,richmond,96923,1392
+Sandisfield,sandisfield,88250,888
+Savoy,savoy,55000,733
+Sheffield,sheffield,83889,3328
+Stockbridge,stockbridge,131667,1885
+Tyringham,tyringham,150000,459
+Washington,washington,89345,533
+West Stockbridge,west stockbridge,99961,1201
+Williamstown,williamstown,97813,7463
+Windsor,windsor,104766,1019
+Acushnet,acushnet,91050,10563
+Attleboro,attleboro,93266,46499
+Berkley,berkley,123877,6789
+Dartmouth,dartmouth,98662,32621
+Dighton,dighton,137616,8122
+Easton,easton,121458,25162
+Fairhaven,fairhaven,92500,15878
+Fall River,fall river,53933,93764
+Freetown,freetown,144722,9222
+Mansfield,mansfield,131409,23855
+New Bedford,new bedford,56025,100731
+North Attleborough Town,north attleboro,109426,30842
+Norton,norton,127404,19155
+Raynham,raynham,117950,15273
+Rehoboth,rehoboth,126161,12809
+Seekonk,seekonk,116310,15573
+Somerset,somerset,111720,18246
+Swansea,swansea,116627,17231
+Taunton,taunton,79715,59719
+Westport,westport,100703,16382
+Aquinnah,aquinnah,117813,667
+Chilmark,chilmark,166250,1726
+Edgartown,edgartown,89710,5212
+Gosnold,gosnold,-666666666,51
+Oak Bluffs,oak bluffs,117927,5370
+Tisbury,tisbury,70724,4860
+West Tisbury,west tisbury,194526,2865
+Amesbury Town,amesbury,100599,17277
+Andover,andover,167591,36465
+Beverly,beverly,103739,42408
+Boxford,boxford,192605,8155
+Danvers,danvers,117072,27924
+Essex,essex,152371,3680
+Georgetown,georgetown,152014,8454
+Gloucester,gloucester,87898,29862
+Groveland,groveland,135521,6747
+Hamilton,hamilton,126331,7571
+Haverhill,haverhill,87675,67387
+Ipswich,ipswich,124405,13820
+Lawrence,lawrence,57903,88297
+Lynn,lynn,74715,100905
+Lynnfield,lynnfield,172484,12964
+Manchester-by-the-Sea,manchester,197875,5368
+Marblehead,marblehead,165859,20334
+Merrimac,merrimac,116477,6707
+Methuen Town,methuen,103270,53043
+Middleton,middleton,171458,9727
+Nahant,nahant,111004,3328
+Newbury,newbury,176196,6729
+Newburyport,newburyport,144259,18444
+North Andover,north andover,134319,31024
+Peabody,peabody,95278,54180
+Rockport,rockport,93227,6977
+Rowley,rowley,117177,6214
+Salem,salem,85137,44241
+Salisbury,salisbury,102521,9217
+Saugus,saugus,100819,28599
+Swampscott,swampscott,128964,15209
+Topsfield,topsfield,176698,6535
+Wenham,wenham,187652,4930
+West Newbury,west newbury,189048,4536
+Ashfield,ashfield,80216,1809
+Bernardston,bernardston,78427,2079
+Buckland,buckland,80995,2001
+Charlemont,charlemont,59327,1054
+Colrain,colrain,86429,1663
+Conway,conway,92471,1757
+Deerfield,deerfield,103110,5136
+Erving,erving,74550,1639
+Gill,gill,90000,1831
+Greenfield,greenfield,53961,17662
+Hawley,hawley,99375,360
+Heath,heath,93750,782
+Leverett,leverett,113750,1704
+Leyden,leyden,105357,650
+Monroe,monroe,64375,115
+Montague,montague,72344,8501
+New Salem,new salem,78611,1058
+Northfield,northfield,102470,2875
+Orange,orange,54105,7583
+Rowe,rowe,87917,469
+Shelburne,shelburne,79676,1476
+Shutesbury,shutesbury,108021,1867
+Sunderland,sunderland,61442,3653
+Warwick,warwick,95000,861
+Wendell,wendell,69213,816
+Whately,whately,102734,1521
+Agawam Town,agawam,82359,28510
+Blandford,blandford,88587,1165
+Brimfield,brimfield,101477,3694
+Chester,chester,87308,1322
+Chicopee,chicopee,66927,55213
+East Longmeadow,east longmeadow,101540,16368
+Granville,granville,89643,1680
+Hampden,hampden,110703,4937
+Holland,holland,86806,2576
+Holyoke,holyoke,51892,37949
+Longmeadow,longmeadow,144639,15724
+Ludlow,ludlow,78981,20846
+Monson,monson,84067,8126
+Montgomery,montgomery,125000,873
+Palmer Town,palmer,78789,12372
+Russell,russell,105833,1264
+Southwick,southwick,108833,9222
+Springfield,springfield,51339,154751
+Tolland,tolland,106458,475
+Wales,wales,93971,1927
+Westfield,westfield,82847,40673
+West Springfield Town,west springfield,70401,28635
+Wilbraham,wilbraham,124004,14551
+Amherst Town,amherst,65938,35472
+Belchertown,belchertown,99089,15366
+Chesterfield,chesterfield,102031,964
+Cummington,cummington,101250,916
+Easthampton Town,easthampton,72925,16103
+Goshen,goshen,93125,965
+Granby,granby,110188,6088
+Hadley,hadley,117580,5299
+Hatfield,hatfield,100381,3324
+Huntington,huntington,94871,2205
+Middlefield,middlefield,89063,373
+Northampton,northampton,78467,28640
+Pelham,pelham,121667,1332
+Plainfield,plainfield,78750,623
+Southampton,southampton,125534,6212
+South Hadley,south hadley,93646,17410
+Ware,ware,69666,10012
+Westhampton,westhampton,95192,1514
+Williamsburg,williamsburg,108500,2716
+Worthington,worthington,91250,1061
+Acton,acton,153338,23961
+Arlington,arlington,141440,46015
+Ashby,ashby,110536,3188
+Ashland,ashland,127106,18694
+Ayer,ayer,105047,8491
+Bedford,bedford,158964,14343
+Belmont,belmont,178188,27009
+Billerica,billerica,139706,41700
+Boxborough,boxborough,151000,5468
+Burlington,burlington,142207,26223
+Cambridge,cambridge,126469,117794
+Carlisle,carlisle,250001,5209
+Chelmsford,chelmsford,140519,36220
+Concord,concord,212315,18226
+Dracut,dracut,111539,32356
+Dunstable,dunstable,202379,3375
+Everett,everett,79658,49236
+Framingham,framingham,98179,72013
+Groton,groton,189180,11265
+Holliston,holliston,154684,14964
+Hopkinton,hopkinton,204418,19050
+Hudson,hudson,107202,19959
+Lexington,lexington,219402,34085
+Lincoln,lincoln,180750,6946
+Littleton,littleton,146250,10150
+Lowell,lowell,76205,114799
+Malden,malden,95298,65509
+Marlborough,marlborough,95047,41398
+Maynard,maynard,119549,10663
+Medford,medford,118089,59062
+Melrose,melrose,126854,29488
+Natick,natick,134591,36627
+Newton,newton,184989,88504
+North Reading,north reading,150820,15634
+Pepperell,pepperell,126976,11656
+Reading,reading,163725,25448
+Sherborn,sherborn,247500,4404
+Shirley,shirley,121875,7017
+Somerville,somerville,127056,80549
+Stoneham,stoneham,112635,22986
+Stow,stow,177862,7109
+Sudbury,sudbury,234634,19067
+Tewksbury,tewksbury,125966,31168
+Townsend,townsend,120238,9052
+Tyngsborough,tyngsborough,144375,12424
+Wakefield,wakefield,130320,27284
+Waltham,waltham,116560,64723
+Watertown Town,watertown,123422,35270
+Wayland,wayland,221250,13826
+Westford,westford,181523,24584
+Weston,weston,250001,11443
+Wilmington,wilmington,161473,23195
+Winchester,winchester,218176,22862
+Woburn,woburn,107754,41205
+Nantucket,nantucket,119750,14299
+Avon,avon,129487,4753
+Bellingham,bellingham,120966,17160
+Braintree Town,braintree,125305,38762
+Brookline,brookline,140631,62822
+Canton,canton,128341,24459
+Cohasset,cohasset,187060,8358
+Dedham,dedham,124375,25109
+Dover,dover,250001,5893
+Foxborough,foxborough,108559,18516
+Franklin Town,franklin,142788,33067
+Holbrook,holbrook,107768,11320
+Medfield,medfield,214801,12923
+Medway,medway,174357,13251
+Millis,millis,149021,8699
+Milton,milton,178053,28481
+Needham,needham,212241,32059
+Norfolk,norfolk,197379,11556
+Norwood,norwood,97110,31380
+Plainville,plainville,95625,9872
+Quincy,quincy,95711,101361
+Randolph Town,randolph,103129,34683
+Sharon,sharon,183724,18478
+Stoughton,stoughton,104164,29074
+Walpole,walpole,159720,26294
+Wellesley,wellesley,250001,29906
+Westwood,westwood,205000,16213
+Weymouth Town,weymouth,100077,57786
+Wrentham,wrentham,147930,12305
+Abington,abington,119787,17008
+Bridgewater Town,bridgewater,112482,28669
+Brockton,brockton,77089,105080
+Carver,carver,78955,11645
+Duxbury,duxbury,171471,16110
+East Bridgewater,east bridgewater,128679,14420
+Halifax,halifax,106851,7734
+Hanover,hanover,174821,14800
+Hanson,hanson,111897,10615
+Hingham,hingham,181017,24185
+Hull,hull,127112,10098
+Kingston,kingston,115863,13782
+Lakeville,lakeville,126182,11732
+Marion,marion,120227,5312
+Marshfield,marshfield,125525,25795
+Mattapoisett,mattapoisett,117308,6563
+Middleborough,middleborough,91914,24360
+Norwell,norwell,182637,11309
+Pembroke,pembroke,141332,18335
+Plymouth,plymouth,111975,62656
+Plympton,plympton,119750,2934
+Rochester,rochester,119239,5770
+Rockland,rockland,101475,17709
+Scituate,scituate,131861,19145
+Wareham,wareham,82741,23226
+West Bridgewater,west bridgewater,124483,7682
+Whitman,whitman,107794,15215
+Boston,boston,94755,663972
+Chelsea,chelsea,72220,39460
+Revere,revere,81121,59933
+Winthrop Town,winthrop,106357,18807
+Ashburnham,ashburnham,115420,6357
+Athol,athol,65458,11937
+Auburn,auburn,100786,16840
+Barre,barre,95607,5535
+Berlin,berlin,122411,3311
+Blackstone,blackstone,98986,9211
+Bolton,bolton,198475,5698
+Boylston,boylston,124732,4896
+Brookfield,brookfield,71875,3442
+Charlton,charlton,119809,13359
+Clinton,clinton,93849,15430
+Douglas,douglas,147185,9096
+Dudley,dudley,85179,11886
+East Brookfield,east brookfield,76382,2120
+Fitchburg,fitchburg,70659,41633
+Gardner,gardner,62948,21075
+Grafton,grafton,124548,19771
+Hardwick,hardwick,81250,2671
+Harvard,harvard,200688,6881
+Holden,holden,142880,19885
+Hopedale,hopedale,115216,6024
+Hubbardston,hubbardston,102344,4339
+Lancaster,lancaster,130444,8470
+Leicester,leicester,95776,11076
+Leominster,leominster,81556,43697
+Lunenburg,lunenburg,109753,11804
+Mendon,mendon,129837,6266
+Milford,milford,92726,30304
+Millbury,millbury,116000,13899
+Millville,millville,115789,3156
+New Braintree,new braintree,99375,925
+Northborough,northborough,174358,15694
+Northbridge,northbridge,103355,16358
+North Brookfield,north brookfield,81010,4739
+Oakham,oakham,96207,1623
+Oxford,oxford,104000,13349
+Paxton,paxton,133750,4996
+Petersham,petersham,107656,1173
+Phillipston,phillipston,92027,1915
+Princeton,princeton,150577,3500
+Royalston,royalston,101705,1500
+Rutland,rutland,155504,9202
+Shrewsbury,shrewsbury,136225,38440
+Southborough,southborough,192006,10441
+Southbridge Town,southbridge,59397,17806
+Spencer,spencer,79086,11961
+Sterling,sterling,136027,8111
+Sturbridge,sturbridge,129606,9889
+Sutton,sutton,156215,9383
+Templeton,templeton,103277,8187
+Upton,upton,155952,8095
+Uxbridge,uxbridge,127083,14318
+Warren,warren,66587,4981
+Webster,webster,68934,17674
+Westborough,westborough,134474,21591
+West Boylston,west boylston,99674,7732
+West Brookfield,west brookfield,78988,3830
+Westminster,westminster,101161,8289
+Winchendon,winchendon,85160,10392
+Worcester,worcester,67544,205501

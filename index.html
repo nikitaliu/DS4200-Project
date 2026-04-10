@@ -11,16 +11,15 @@
 <body>
     <nav class="site-nav">
         <div class="nav-inner">
-            <div class="brand">DS4200 Housing Dashboard</div>
+            <div class="brand">MA Housing Guide</div>
             <ul>
-                <li><a href="#overview">Overview</a></li>
-                <li><a href="#data">Data</a></li>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#research-questions">Questions</a></li>
+                <li><a href="#methodology">Methodology</a></li>
+                <li><a href="#terminology">Terminology</a></li>
+                <li><a href="#findings">Findings</a></li>
+                <li><a href="#future-directions">Future Directions</a></li>
                 <li><a href="#references">References</a></li>
-                <li><a href="#market">Market Map</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#affordability">Affordability</a></li>
-                <li><a href="#risk">Risk</a></li>
-                <li><a href="#conclusions">Conclusions</a></li>
             </ul>
         </div>
     </nav>
@@ -28,44 +27,42 @@
     <header class="hero">
         <div class="hero-inner">
             <div class="hero-copy">
-                <div class="eyebrow">Massachusetts Housing Financial Analysis</div>
+                <div class="eyebrow">DS4200 · Northeastern University</div>
                 <h1>Exploring Massachusetts Housing Costs</h1>
                 <p class="subtitle">
-                    A single-page analytics site that links listing prices to property features, livability,
-                    household income, and environmental risk. The goal is to read the Massachusetts market
-                    the way a financial analyst would: through affordability pressure, return proxies,
-                    and risk-adjusted valuation.
+                    A visual guide to understanding why housing costs what it does across Massachusetts towns.
+                    We combine listing data, town income data, and environmental risk scores to explain price
+                    differences in plain English.
                 </p>
                 <div class="hero-meta">
                     <span>Xinyue Du</span>
                     <span>Xiqiao Liu</span>
                     <span>Lin Pan</span>
-                    <span>DS4200 · Northeastern University</span>
                     <span>April 2026</span>
                 </div>
             </div>
             <aside class="hero-panel">
-                <h2>Dashboard Snapshot</h2>
+                <h2>At a glance</h2>
                 <div class="metric-grid">
                     <div class="metric-card">
                         <h3>Cleaned listings</h3>
                         <div class="value" id="hero-listings">--</div>
-                        <div class="meta">Rows retained after de-duplication and outlier controls</div>
+                        <div class="meta">Listings retained after cleaning</div>
                     </div>
                     <div class="metric-card">
-                        <h3>Towns with income data</h3>
+                        <h3>Town profiles</h3>
                         <div class="value" id="hero-towns">--</div>
-                        <div class="meta">Municipalities covered by the ACS affordability join</div>
+                        <div class="meta">Towns with income data we could match</div>
                     </div>
                     <div class="metric-card">
                         <h3>Median listing price</h3>
                         <div class="value" id="hero-median">--</div>
-                        <div class="meta">Statewide sample median across cleaned listings</div>
+                        <div class="meta">Middle asking price in the sample</div>
                     </div>
                     <div class="metric-card">
-                        <h3>Risk-price correlation</h3>
+                        <h3>Risk and price</h3>
                         <div class="value" id="hero-risk">--</div>
-                        <div class="meta">Composite environmental risk versus price</div>
+                        <div class="meta">Correlation between price and environmental risk</div>
                     </div>
                 </div>
             </aside>
@@ -73,78 +70,335 @@
     </header>
 
     <main>
-        <section id="overview">
+        <section id="introduction">
             <div class="section-card">
                 <p class="section-kicker">Introduction</p>
-                <h2>Why this market needs more than a price chart</h2>
-                <p class="section-intro">
-                    Massachusetts combines some of the highest household incomes in the country with one of
-                    the most strained housing markets. In the cleaned sample, the median listing price is
-                    <strong id="median-price">--</strong> while the mean listing price is
-                    <strong id="mean-price">--</strong>, signaling a market with an expensive upper tail and
-                    strong location-driven premiums.
+                <h2>A plain-English look at how Massachusetts housing works</h2>
+                <p class="body-copy">
+                    This project is an interactive explainer about housing prices across Massachusetts. We use
+                    public listing data and U.S. Census town data to show how prices change from one place to
+                    another, what home features matter most, and where affordability is under the most pressure.
                 </p>
-                <div class="number-line">
-                    <div class="number-pill">Highest price-to-income town <span id="max-ratio-town">--</span> <span id="max-ratio-value">--</span></div>
-                    <div class="number-pill">Lowest price-to-income town <span id="min-ratio-town">--</span> <span id="min-ratio-value">--</span></div>
-                    <div class="number-pill">Towns below affordability threshold <span id="unaffordable-count">--</span> of <span id="coverage-count">--</span></div>
+                <p class="body-copy">
+                    Housing matters because prices in Massachusetts have risen far faster than many households can
+                    comfortably absorb. In Greater Boston, the income needed to buy a starter home rose from about
+                    $97,941 in 2021 to about $162,224 in 2025. That gap affects where people can live, how far they
+                    commute, and how long it takes to build financial stability.
+                </p>
+                <p class="body-copy">
+                    We wrote this site for the general public, not for specialists. That means every figure has a
+                    takeaway paragraph, formulas are explained in the <a href="#term-price-to-income">Terminology</a>
+                    section, and technical ideas like <a href="#term-correlation">correlation</a> or
+                    <a href="#term-cap-rate">cap rate</a> are introduced in everyday language.
+                </p>
+            </div>
+        </section>
+
+        <section id="research-questions">
+            <div class="section-card">
+                <p class="section-kicker">Research Questions</p>
+                <h2>What questions does this project answer?</h2>
+                <ol class="question-list">
+                    <li>How do housing prices vary geographically across Massachusetts?</li>
+                    <li>What property features, such as size, age, and home type, have the strongest relationship with price?</li>
+                    <li>Do towns with better walkability and transit access have higher housing costs?</li>
+                    <li>Are environmental risks such as flood, fire, and heat reflected in housing prices, or are they being overlooked?</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="methodology">
+            <div class="section-card">
+                <p class="section-kicker">Methodology</p>
+                <h2>What we used, how we cleaned it, and what we created</h2>
+
+                <div class="methodology-block">
+                    <h3>Data sources</h3>
+                    <p class="body-copy">
+                        <strong>What we did:</strong> We combined a Massachusetts housing listing dataset with
+                        town-level Census data so we could compare local prices with local income and demographics.
+                        <strong>How we did it:</strong> We started with a Kaggle dataset containing Zillow-style listing
+                        records, then called the 2023 ACS API for town-level income, tenure, race, home value, and
+                        employment-by-industry variables. <strong>The output:</strong> We matched income data for
+                        <span id="method-income-towns">--</span> towns and generated one town profile file for
+                        the slide-in map panel.
+                    </p>
                 </div>
-                <div class="two-col">
+
+                <div class="methodology-block">
+                    <h3>Data cleaning</h3>
+                    <p class="body-copy">
+                        <strong>What we did:</strong> We cleaned raw listing fields so they could be used in calculations
+                        and charts. <strong>How we did it:</strong> We converted prices like “$999,000” into numbers,
+                        standardized property types, parsed score strings, removed duplicate listing IDs, filtered out
+                        non-Massachusetts rows, and capped extreme outliers above $10 million or 15,000 square feet.
+                        <strong>The output:</strong> We started with <span id="method-raw-rows">--</span> raw rows,
+                        removed <span id="method-duplicates">--</span> duplicate IDs, filtered out
+                        <span id="method-non-ma">--</span> non-Massachusetts rows, and finished with
+                        <span id="method-cleaned-rows">--</span> cleaned listings.
+                    </p>
+                </div>
+
+                <div class="methodology-block">
+                    <h3>Feature engineering</h3>
+                    <p class="body-copy">
+                        <strong>What we did:</strong> We created new columns that make prices easier to compare.
+                        <strong>How we did it:</strong> We calculated values like
+                        <a href="#term-price-per-sqft">price per square foot</a>,
+                        <a href="#term-price-to-income">price-to-income ratio</a>,
+                        <a href="#term-affordability-index">monthly affordability index</a>,
+                        <a href="#term-cap-rate">estimated cap rate</a>,
+                        <a href="#term-roi">ROI</a>, and composite scores for
+                        <a href="#term-livability-composite">livability</a> and
+                        <a href="#term-environmental-risk-composite">environmental risk</a>.
+                        <strong>The output:</strong> The final cleaned file includes more than 10 analytical features
+                        and supports every chart on the website.
+                    </p>
+                </div>
+
+                <div class="methodology-grid">
                     <div class="info-card">
-                        <h3>Financial framing</h3>
+                        <h3>Kaggle housing data</h3>
                         <p>
-                            The dashboard treats listings as an investable market. We estimate cap rate and
-                            gross rent multiplier proxies, compare median listing price to local purchasing
-                            power, and test whether buyers are paying premiums for livability or overlooking
-                            environmental exposure.
+                            The raw listing file includes prices, square footage, bedrooms, bathrooms, property type,
+                            estimated monthly payment, walkability, school distance, and five environmental risk fields.
                         </p>
                     </div>
                     <div class="info-card">
-                        <h3>Key questions</h3>
-                        <ul class="bullet-list">
-                            <li>Which towns carry the steepest valuation premium relative to local income?</li>
-                            <li>How much of price movement is explained by square footage, bathrooms, and livability?</li>
-                            <li>Do environmental risks show up as a discount, or are they being absorbed by location desirability?</li>
-                        </ul>
+                        <h3>ACS town profiles</h3>
+                        <p>
+                            The ACS pull provides median household income, owner-versus-renter counts, Census median
+                            home value, race or ethnicity counts, age buckets, and employment by industry for each town.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="data">
+        <section id="terminology">
             <div class="section-card">
-                <p class="section-kicker">Data and Methods</p>
-                <h2>Single source of truth: cleaned listings plus ACS income</h2>
+                <p class="section-kicker">Terminology / Glossary</p>
+                <h2>Key terms used throughout the site</h2>
+                <div class="glossary-grid">
+                    <article class="glossary-item" id="term-listing-price">
+                        <h3>Listing Price</h3>
+                        <p>The asking price shown in a home listing. It is what the seller hopes to get, not necessarily the final sale price.</p>
+                    </article>
+                    <article class="glossary-item" id="term-price-per-sqft">
+                        <h3>Price per Square Foot</h3>
+                        <p>How much each square foot of living space costs. It helps compare homes of different sizes more fairly.</p>
+                        <p><strong>Formula:</strong> Price ÷ Square Footage</p>
+                        <p><strong>Example:</strong> <span id="glossary-ppsf-example">--</span></p>
+                    </article>
+                    <article class="glossary-item" id="term-price-to-income">
+                        <h3>Price-to-Income Ratio</h3>
+                        <p>How many years of a town’s typical household income equal the median home price. Higher values mean the market is less affordable.</p>
+                        <p><strong>Formula:</strong> Median Listing Price ÷ Median Household Income</p>
+                        <p><strong>Example:</strong> <span id="glossary-ratio-example">--</span></p>
+                    </article>
+                    <article class="glossary-item" id="term-affordability-index">
+                        <h3>Monthly Affordability Index</h3>
+                        <p>Whether a typical household can cover a typical monthly housing payment. Values above 1 suggest the payment is more reachable; values below 1 suggest strain.</p>
+                        <p><strong>Formula:</strong> Monthly Household Income ÷ Estimated Monthly Payment</p>
+                    </article>
+                    <article class="glossary-item" id="term-cap-rate">
+                        <h3>Estimated Cap Rate</h3>
+                        <p>A rough estimate of annual rental return on a property, shown as a percentage. In this project it is only a proxy, not observed rent.</p>
+                        <p><strong>Formula:</strong> (Estimated Annual Rent ÷ Price) × 100</p>
+                        <p><strong>Example:</strong> <span id="glossary-cap-rate-example">--</span></p>
+                    </article>
+                    <article class="glossary-item" id="term-grm">
+                        <h3>Gross Rent Multiplier (GRM)</h3>
+                        <p>How many years of rent would equal the purchase price. Lower values usually indicate better value for someone evaluating rental potential.</p>
+                        <p><strong>Formula:</strong> Price ÷ Estimated Annual Rent</p>
+                        <p><strong>Example:</strong> <span id="glossary-grm-example">--</span></p>
+                    </article>
+                    <article class="glossary-item" id="term-roi">
+                        <h3>ROI (Return on Investment)</h3>
+                        <p>The percentage gain or loss compared with a property’s past purchase price. We estimate it from listing history when a past sale is available.</p>
+                        <p><strong>Formula:</strong> (Current Price − Past Price) ÷ Past Price × 100</p>
+                        <p><strong>Example:</strong> <span id="glossary-roi-example">--</span></p>
+                    </article>
+                    <article class="glossary-item" id="term-annualized-appreciation">
+                        <h3>Annualized Appreciation</h3>
+                        <p>The average yearly percentage change in value since the last sale. It smooths multi-year price growth into a yearly rate.</p>
+                        <p><strong>Formula:</strong> (Current ÷ Past)^(1/years) − 1</p>
+                        <p><strong>Example:</strong> <span id="glossary-appreciation-example">--</span></p>
+                    </article>
+                    <article class="glossary-item" id="term-livability-composite">
+                        <h3>Livability Composite Score</h3>
+                        <p>An average of walk, bike, and transit scores. Higher values suggest it is easier to get around without depending entirely on a car.</p>
+                        <p><strong>Formula:</strong> (Walk + Bike + Transit) ÷ 3</p>
+                    </article>
+                    <article class="glossary-item" id="term-environmental-risk-composite">
+                        <h3>Environmental Risk Composite</h3>
+                        <p>An average of flood, fire, wind, heat, and air-quality risk scores. Higher values mean greater environmental exposure.</p>
+                        <p><strong>Formula:</strong> (Flood + Fire + Wind + Heat + Air) ÷ 5</p>
+                    </article>
+                    <article class="glossary-item" id="term-correlation">
+                        <h3>Correlation Coefficient (r)</h3>
+                        <p>A number from −1 to +1 that shows how strongly two things move together. Positive values mean they tend to rise together, and negative values mean one tends to fall as the other rises.</p>
+                    </article>
+                    <article class="glossary-item" id="term-quartile">
+                        <h3>Quartile</h3>
+                        <p>Splitting all homes into four equal-sized price groups. Q1 is the cheapest quarter of listings and Q4 is the most expensive quarter.</p>
+                    </article>
+                    <article class="glossary-item" id="term-iqr">
+                        <h3>IQR (Interquartile Range)</h3>
+                        <p>The distance between Q1 and Q3. Box plots use it to show the middle 50% of prices, and outliers sit beyond 1.5 times this range.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="findings">
+            <div class="section-card">
+                <p class="section-kicker">Findings</p>
+                <h2>What the charts show</h2>
                 <p class="section-intro">
-                    The pipeline starts from Zillow-style Massachusetts listings, standardizes price, score,
-                    and risk fields, extracts prior sale information from listing history, and joins town-level
-                    median household income and population from the 2023 ACS 5-year estimates. Every chart on
-                    this page is fed from <code>data/ma_housing_cleaned.csv</code> and its town-level derivative.
+                    Each finding below answers one of the project’s research questions. The goal is not just to
+                    show a chart, but to explain what it means for people comparing where they might be able to live.
                 </p>
+
+                <article class="finding-section" id="finding-1">
+                    <div class="finding-heading">
+                        <p class="finding-label">Research Question 1</p>
+                        <h3>How do prices vary across Massachusetts?</h3>
+                    </div>
+                    <div class="chart-shell resizable-shell">
+                        <h4>Interactive choropleth map of town-level housing pressure</h4>
+                        <p class="chart-note">
+                            Hover to compare towns, change the map metric with the dropdown, and click any town to open
+                            its profile panel with housing, demographic, and employment details.
+                        </p>
+                        <div id="choropleth-container"></div>
+                    </div>
+                    <p class="finding-text">
+                        We mapped the median listing price for towns across Massachusetts and added toggles for
+                        <a href="#term-price-to-income">price-to-income ratio</a>,
+                        <a href="#term-cap-rate">estimated cap rate</a>, and
+                        <a href="#term-environmental-risk-composite">environmental risk</a>. We found that the
+                        highest-price clusters are concentrated in coastal, island, and inner-metro towns, while the
+                        lowest-price towns sit largely in western and more rural parts of the state. This matters because
+                        location still acts as the strongest broad filter on affordability before buyers even start
+                        comparing individual houses.
+                    </p>
+                </article>
+
+                <article class="finding-section" id="finding-2">
+                    <div class="finding-heading">
+                        <p class="finding-label">Research Question 2</p>
+                        <h3>Which home features are most closely tied to price?</h3>
+                    </div>
+                    <div class="viz-grid">
+                        <div class="chart-shell resizable-shell">
+                            <h4>Scatter plot of price versus property features</h4>
+                            <p class="chart-note">
+                                Switch the x-axis feature, brush a region to create a custom comparison set, and use the
+                                density toggle if the dots become crowded.
+                            </p>
+                            <iframe class="chart-frame" src="altair_charts/scatter_price_drivers.html" title="Scatter plot of price drivers"></iframe>
+                        </div>
+                        <div class="chart-shell resizable-shell">
+                            <h4>Price distribution by property type</h4>
+                            <p class="chart-note">
+                                The box shows the middle 50% of prices. See <a href="#term-iqr">IQR</a> in the glossary
+                                for the exact definition.
+                            </p>
+                            <div id="boxplot-container"></div>
+                        </div>
+                    </div>
+                    <p class="finding-text">
+                        We plotted listing price against home size, age, and other features, then grouped the listings by
+                        property type in a D3 box plot. We found that larger homes and homes with more bathrooms have the
+                        clearest positive relationship with price, while different property types occupy noticeably
+                        different price ranges and spreads. This means buyers are not only paying for “more space”; they
+                        are also paying for different market segments with different typical price bands.
+                    </p>
+                </article>
+
+                <article class="finding-section" id="finding-3">
+                    <div class="finding-heading">
+                        <p class="finding-label">Research Question 3</p>
+                        <h3>Do walkability and transit access come with a premium?</h3>
+                    </div>
+                    <div class="viz-grid">
+                        <div class="chart-shell resizable-shell">
+                            <h4>Livability scores by price quartile</h4>
+                            <p class="chart-note">
+                                We split listings into four <a href="#term-quartile">quartiles</a> by price and compared
+                                their average walk, bike, and transit scores.
+                            </p>
+                            <iframe class="chart-frame" src="altair_charts/grouped_bar_livability.html" title="Grouped bar chart of livability by price quartile"></iframe>
+                        </div>
+                        <div class="chart-shell resizable-shell">
+                            <h4>Town income versus median listing price</h4>
+                            <p class="chart-note">
+                                The dashed line marks a simple rule-of-thumb threshold where a home costs four times local
+                                income. Towns above that line are more stretched.
+                            </p>
+                            <iframe class="chart-frame" src="altair_charts/income_vs_price.html" title="Income versus price scatter plot"></iframe>
+                        </div>
+                    </div>
+                    <p class="finding-text">
+                        We compared livability scores across price groups and then compared town income with town-level
+                        prices. We found that higher-priced groups generally score better on walkability and transit, but
+                        many towns still sit far above a traditional affordability threshold when local income is brought
+                        into the picture. This means convenience and accessibility do appear to raise prices, and households
+                        often have to choose between being well connected and staying within budget.
+                    </p>
+                </article>
+
+                <article class="finding-section" id="finding-4">
+                    <div class="finding-heading">
+                        <p class="finding-label">Research Question 4</p>
+                        <h3>Are environmental risks showing up in prices?</h3>
+                    </div>
+                    <div class="chart-shell resizable-shell">
+                        <h4>Correlation heatmap of prices, features, livability, and risk</h4>
+                        <p class="chart-note">
+                            Red cells mean two variables tend to move in the same direction. Blue cells mean they tend to
+                            move in opposite directions. Cells with stronger correlations are labeled directly.
+                        </p>
+                        <iframe class="chart-frame" src="altair_charts/heatmap_correlation.html" title="Correlation heatmap"></iframe>
+                    </div>
+                    <p class="finding-text">
+                        We calculated how strongly each variable pair moves together using a
+                        <a href="#term-correlation">correlation coefficient</a>. We found that environmental risk is not
+                        strongly discounted in this sample: the overall relationship between price and environmental risk is
+                        weakly positive rather than strongly negative. This matters because some desirable locations may stay
+                        expensive even when they carry more long-term exposure, which can make the true cost of housing less
+                        obvious to the public.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section id="future-directions">
+            <div class="section-card">
+                <p class="section-kicker">Future Directions</p>
+                <h2>What we would improve with more time</h2>
                 <div class="viz-grid">
                     <div class="info-card">
-                        <h3>Primary listing fields</h3>
+                        <h3>Deeper housing detail</h3>
                         <p>
-                            Price, square footage, bedrooms, bathrooms, year built, property type, monthly
-                            payment estimate, walk/bike/transit scores, school distances, and five Zillow risk
-                            dimensions are preserved in the cleaned file.
+                            We would add time-series price data, school quality, and a cleaner rent dataset so the
+                            return and affordability measures rely less on proxy calculations.
                         </p>
                     </div>
                     <div class="info-card">
-                        <h3>Engineered financial metrics</h3>
+                        <h3>More local context</h3>
                         <p>
-                            Price per sqft, age of home, livability composite, environmental risk composite,
-                            price appreciation, annualized appreciation, estimated cap rate, gross rent
-                            multiplier, price-to-income ratio, and monthly affordability index are all computed
-                            directly in Python.
+                            We would also push below the town level for places like Boston, where neighborhood differences
+                            are large enough that a citywide average can hide important patterns.
                         </p>
                     </div>
                 </div>
                 <div class="assumption-card" style="margin-top: 1rem;">
                     <p>
-                        <strong>Assumption note:</strong> Estimated cap rate uses a rough rental proxy:
-                        <code>estimatedAnnualRent = estimatedMonthlyPayment × 12 × 1.1</code>. This is clearly
-                        labeled as a heuristic, not a direct observed rent series.
+                        One important limitation is that listing prices are asking prices, not closing prices. Another is that
+                        our <a href="#term-cap-rate">cap rate</a> and <a href="#term-grm">GRM</a> values use a payment-based
+                        rent proxy rather than observed rent rolls.
                     </p>
                 </div>
             </div>
@@ -153,18 +407,18 @@
         <section id="references">
             <div class="section-card">
                 <p class="section-kicker">References</p>
-                <h2>Sources and supporting reading</h2>
+                <h2>Data sources and supporting reading</h2>
                 <div class="viz-grid">
                     <div class="reference-card">
                         <h3>Data sources</h3>
                         <ul class="bullet-list">
                             <li><a href="https://www.kaggle.com/datasets/vraj105/massachusetts-housing-data" target="_blank" rel="noreferrer">Kaggle Massachusetts housing listings</a></li>
-                            <li><a href="https://api.census.gov/data/2023/acs/acs5.html" target="_blank" rel="noreferrer">U.S. Census Bureau ACS 5-year API</a></li>
-                            <li><a href="https://gist.githubusercontent.com/bycoffe/5871252/raw/ma-towns.topojson" target="_blank" rel="noreferrer">Massachusetts town TopoJSON used for the choropleth</a></li>
+                            <li><a href="https://api.census.gov/data/2023/acs/acs5.html" target="_blank" rel="noreferrer">U.S. Census Bureau ACS 2023 5-year API</a></li>
+                            <li><a href="https://gist.githubusercontent.com/bycoffe/5871252/raw/ma-towns.topojson" target="_blank" rel="noreferrer">Massachusetts town TopoJSON</a></li>
                         </ul>
                     </div>
                     <div class="reference-card">
-                        <h3>Reference papers and reports</h3>
+                        <h3>Reference reading</h3>
                         <ul class="bullet-list">
                             <li><a href="https://www.nber.org/papers/w26807" target="_blank" rel="noreferrer">Hino and Burke (2020), Does Information About Climate Risk Affect Property Values?</a></li>
                             <li><a href="https://www.nber.org/papers/w33958" target="_blank" rel="noreferrer">Potter and Syverson (2025), Building Costs and House Prices</a></li>
@@ -174,234 +428,35 @@
                 </div>
             </div>
         </section>
-
-        <section id="market">
-            <div class="section-card">
-                <p class="section-kicker">Geographic Market Overview</p>
-                <h2>Town-level pricing, affordability pressure, and risk concentration</h2>
-                <p class="section-intro">
-                    This choropleth is the dashboard’s market-screening view. It highlights where listing
-                    premiums cluster, where local income keeps up with housing costs, and where elevated risk
-                    scores coexist with expensive markets.
-                </p>
-                <div class="chart-shell">
-                    <h3>Interactive Choropleth of Massachusetts Towns</h3>
-                    <p class="chart-note">
-                        Hover for town-level details, switch the encoded metric with the dropdown, and click any
-                        municipality to zoom in.
-                    </p>
-                    <div id="choropleth-container"></div>
-                </div>
-                <div class="takeaway-grid">
-                    <div class="takeaway">
-                        <strong>Premium clusters</strong>
-                        <p>
-                            The top of the market is led by <span id="top-town">--</span> while the bottom end
-                            is anchored by <span id="bottom-town">--</span>, showing how uneven price dispersion
-                            is across the Commonwealth.
-                        </p>
-                    </div>
-                    <div class="takeaway">
-                        <strong>Income mismatch</strong>
-                        <p>
-                            Even with ACS coverage on only matched municipalities, the price-to-income spread
-                            ranges from near lending-guideline territory to extreme coastal and island premiums.
-                        </p>
-                    </div>
-                    <div class="takeaway">
-                        <strong>Analyst read</strong>
-                        <p>
-                            Metro Boston and Cape or island markets remain premium zones, while western and more
-                            rural towns dominate the lower-cost end of the state distribution.
-                        </p>
-                    </div>
-                </div>
-                <div class="viz-grid">
-                    <div class="info-card">
-                        <h3>Top median-price towns in the sample</h3>
-                        <ol class="top-list" id="top-town-list"></ol>
-                    </div>
-                    <div class="info-card">
-                        <h3>Most affordable median-price towns in the sample</h3>
-                        <ol class="top-list" id="bottom-town-list"></ol>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="features">
-            <div class="section-card">
-                <p class="section-kicker">Property Features</p>
-                <h2>Comparable analysis and price stratification</h2>
-                <p class="section-intro">
-                    The scatterplot below functions like a comp set explorer: select a driver on the x-axis,
-                    brush a region of listings, and read the summary row as a quick valuation range. The D3
-                    box plot complements that view by showing the median, spread, and outliers for each property
-                    segment.
-                </p>
-                <div class="viz-grid">
-                    <div class="chart-shell">
-                        <h3>Scatter: price drivers and comp selection</h3>
-                        <p class="chart-note">
-                            The strongest positive price correlations in the cleaned sample are
-                            <strong id="corr-feature-1">--</strong> (<span id="corr-feature-1-value">--</span>)
-                            and <strong id="corr-feature-2">--</strong> (<span id="corr-feature-2-value">--</span>).
-                        </p>
-                        <iframe class="chart-frame" src="altair_charts/scatter_price_drivers.html" title="Scatter plot of price drivers"></iframe>
-                    </div>
-                    <div class="chart-shell">
-                        <h3>D3 box plot: price distribution by property type</h3>
-                        <p class="chart-note">
-                            Hover on each box for quartiles and click an outlier to inspect the underlying
-                            listing details.
-                        </p>
-                        <div id="boxplot-container"></div>
-                    </div>
-                </div>
-                <div class="takeaway-grid">
-                    <div class="takeaway">
-                        <strong>1 standard deviation in sqft</strong>
-                        <p>Estimated price shift of <span id="sensitivity-sqft">--</span> in the multivariate sensitivity model.</p>
-                    </div>
-                    <div class="takeaway">
-                        <strong>1 standard deviation in livability</strong>
-                        <p>Estimated price shift of <span data-fill="sensitivity-livability">--</span>, suggesting walkability and transit still matter.</p>
-                    </div>
-                    <div class="takeaway">
-                        <strong>1 standard deviation in environmental risk</strong>
-                        <p>Estimated price shift of <span id="sensitivity-risk">--</span>, reinforcing that risk is not being priced as a strong discount here.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="affordability">
-            <div class="section-card">
-                <p class="section-kicker">Livability and Affordability</p>
-                <h2>What buyers pay for accessibility and how that compares with local income</h2>
-                <p class="section-intro">
-                    Livability scores rise with price quartile, but the affordability chart shows that local
-                    earnings do not always rise enough to keep pace. The result is a patchwork market where some
-                    towns remain within reach while others trade at many multiples of household income.
-                </p>
-                <div class="viz-grid">
-                    <div class="chart-shell">
-                        <h3>Grouped bars: livability by price quartile</h3>
-                        <p class="chart-note">
-                            Walk, bike, and transit access are averaged inside each price quartile to reveal the
-                            livability premium.
-                        </p>
-                        <iframe class="chart-frame" src="altair_charts/grouped_bar_livability.html" title="Grouped bar chart of livability by price quartile"></iframe>
-                    </div>
-                    <div class="chart-shell">
-                        <h3>Income versus median listing price by town</h3>
-                        <p class="chart-note">
-                            The dashed reference line marks a traditional <code>4× income</code> affordability
-                            threshold. Towns far above it look expensive relative to local purchasing power.
-                        </p>
-                        <iframe class="chart-frame" src="altair_charts/income_vs_price.html" title="Income versus price scatter plot"></iframe>
-                    </div>
-                </div>
-                <div class="takeaway-grid">
-                    <div class="takeaway">
-                        <strong>Affordability pressure</strong>
-                        <p>
-                            <span data-fill="unaffordable-count">--</span> matched towns have a median affordability
-                            index below one, meaning median household income does not cover the median listing
-                            payment proxy.
-                        </p>
-                    </div>
-                    <div class="takeaway">
-                        <strong>Highest stress case</strong>
-                        <p>
-                            <span data-fill="max-ratio-town">--</span> reaches roughly <span data-fill="max-ratio-value">--</span>,
-                            an extreme valuation premium compared with local income.
-                        </p>
-                    </div>
-                    <div class="takeaway">
-                        <strong>More balanced end of the market</strong>
-                        <p>
-                            <span data-fill="min-ratio-town">--</span> sits near <span data-fill="min-ratio-value">--</span>,
-                            much closer to a traditional affordability benchmark.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="risk">
-            <div class="section-card">
-                <p class="section-kicker">Risk and Correlation</p>
-                <h2>Environmental exposure is present, but not strongly discounted</h2>
-                <p class="section-intro">
-                    The factor heatmap summarizes how price, property attributes, livability, and risk move
-                    together. In this sample, the composite environmental risk correlation with price is
-                    <strong data-fill="risk-correlation">--</strong>, while the strongest negative correlation visible in
-                    the matrix is <strong id="corr-feature-3">--</strong>
-                    (<span id="corr-feature-3-value">--</span>).
-                </p>
-                <div class="chart-shell">
-                    <h3>Correlation heatmap</h3>
-                    <p class="chart-note">
-                        Hover any cell to inspect the exact correlation coefficient between the two variables.
-                    </p>
-                    <iframe class="chart-frame" src="altair_charts/heatmap_correlation.html" title="Correlation heatmap"></iframe>
-                </div>
-                <div class="assumption-card" style="margin-top: 1rem;">
-                    <p>
-                        A small positive correlation between price and environmental risk does not mean risk is
-                        beneficial. It points to a market where desirable coastal or amenity-rich locations can
-                        remain expensive even when they carry more exposure.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section id="conclusions">
-            <div class="section-card">
-                <p class="section-kicker">Conclusions</p>
-                <h2>Three evidence-based takeaways for buyers, investors, and planners</h2>
-                <div class="conclusion-grid">
-                    <article class="conclusion-card primary">
-                        <h3>The livability premium is real</h3>
-                        <p>
-                            Higher price quartiles come with meaningfully stronger walk, bike, and transit scores.
-                            The sensitivity analysis also shows a roughly <strong data-fill="sensitivity-livability">--</strong>
-                            price swing for a one-standard-deviation increase in livability, even after controlling
-                            for square footage and risk.
-                        </p>
-                    </article>
-                    <article class="conclusion-card alert">
-                        <h3>Environmental risk looks underpriced</h3>
-                        <p>
-                            The composite risk correlation with price remains <strong data-fill="risk-correlation">--</strong>,
-                            not the negative pattern you would expect in a market strongly discounting climate exposure.
-                            Coastal desirability appears to offset at least part of the risk penalty.
-                        </p>
-                    </article>
-                    <article class="conclusion-card success">
-                        <h3>Affordability diverges sharply across towns</h3>
-                        <p>
-                            The spread from <strong data-fill="min-ratio-town">--</strong> to
-                            <strong data-fill="max-ratio-town">--</strong> shows how fragmented Massachusetts has become.
-                            Buyers looking for balanced value likely need to focus on moderate-livability towns with
-                            lower price-to-income ratios rather than the state’s highest-amenity premium markets.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
     </main>
+
+    <div id="town-profile-panel" class="town-profile hidden" aria-hidden="true">
+        <div class="town-profile-header">
+            <button id="close-profile" class="close-profile-btn" type="button">← Back to Map</button>
+            <div>
+                <p class="section-kicker">Town Profile</p>
+                <h2 id="profile-town-name">Town name</h2>
+            </div>
+        </div>
+        <div class="profile-tabs">
+            <button class="profile-tab active" data-tab="housing" type="button">Housing</button>
+            <button class="profile-tab" data-tab="demographics" type="button">Demographics</button>
+            <button class="profile-tab" data-tab="employment" type="button">Employment</button>
+        </div>
+        <div id="town-profile-content" class="town-profile-content"></div>
+    </div>
+    <div id="town-profile-backdrop" class="town-profile-backdrop hidden"></div>
 
     <footer class="site-footer">
         <div class="footer-inner">
-            <div>Built for DS4200 with Python, Altair, D3.js, ACS data, and a Massachusetts town TopoJSON.</div>
-            <div><a href="https://nikitaliu.github.io/DS4200-Project/" target="_blank" rel="noreferrer">GitHub Pages deployment target</a></div>
+            <div>Massachusetts Housing Financial Analysis Dashboard · DS4200 · Northeastern University</div>
+            <div><a href="https://nikitaliu.github.io/DS4200-Project/" target="_blank" rel="noreferrer">Published project site</a></div>
         </div>
     </footer>
 
     <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/town-profile.js"></script>
     <script src="js/choropleth.js"></script>
     <script src="js/boxplot.js"></script>
 </body>

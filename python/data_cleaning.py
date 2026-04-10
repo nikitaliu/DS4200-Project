@@ -27,6 +27,7 @@ TOWN_SUMMARY_OUTPUT = ROOT / "data" / "town_summary.csv"
 ANALYSIS_SUMMARY_OUTPUT = ROOT / "data" / "analysis_summary.json"
 
 CENSUS_CANDIDATES = [
+    ROOT / "data" / "census_town_profiles.csv",
     ROOT / "data" / "census_income.csv",
     ROOT / "data" / "processed" / "census_data.csv",
 ]
@@ -278,7 +279,7 @@ def load_census_data() -> pd.DataFrame:
             census_df = pd.read_csv(candidate)
             break
     else:
-        return pd.DataFrame(columns=["town", "townKey", "medianHouseholdIncome", "population"])
+        return pd.DataFrame(columns=["town", "townKey", "medianHouseholdIncome", "medianHomeValueCensus"])
 
     town_column = "town" if "town" in census_df.columns else "townName"
     income_column = "medianHouseholdIncome" if "medianHouseholdIncome" in census_df.columns else "medianIncome"
@@ -294,9 +295,14 @@ def load_census_data() -> pd.DataFrame:
     census_df["medianHouseholdIncome"] = pd.to_numeric(
         census_df["medianHouseholdIncome"], errors="coerce"
     )
-    census_df["population"] = pd.to_numeric(census_df.get("population"), errors="coerce")
+    if "medianHomeValueCensus" in census_df.columns:
+        census_df["medianHomeValueCensus"] = pd.to_numeric(
+            census_df["medianHomeValueCensus"], errors="coerce"
+        )
+    else:
+        census_df["medianHomeValueCensus"] = np.nan
     census_df = census_df.drop_duplicates(subset=["townKey"], keep="first")
-    return census_df[["town", "townKey", "medianHouseholdIncome", "population"]]
+    return census_df[["town", "townKey", "medianHouseholdIncome", "medianHomeValueCensus"]]
 
 
 def build_town_summary(df: pd.DataFrame) -> pd.DataFrame:
@@ -311,7 +317,9 @@ def build_town_summary(df: pd.DataFrame) -> pd.DataFrame:
             medianPricePerSqFt=("pricePerSqFt", "median"),
             medianEstimatedMonthlyPayment=("estimatedMonthlyPayment", "median"),
             medianHouseholdIncome=("medianHouseholdIncome", first_valid),
-            population=("population", first_valid),
+            medianHomeValueCensus=("medianHomeValueCensus", first_valid),
+            medianBedrooms=("bedrooms", "median"),
+            medianBathrooms=("bathrooms", "median"),
             estimatedCapRate=("estimatedCapRate", "median"),
             environmentalRiskComposite=("environmentalRiskComposite", "median"),
             livabilityComposite=("livabilityComposite", "median"),
@@ -354,9 +362,37 @@ def compute_sensitivity(df: pd.DataFrame) -> dict[str, float]:
     return sensitivity
 
 
-def write_analysis_summary(df: pd.DataFrame, town_summary: pd.DataFrame) -> None:
+def write_analysis_summary(
+    df: pd.DataFrame,
+    town_summary: pd.DataFrame,
+    *,
+    duplicates_removed: int,
+    state_filtered_out: int,
+    valid_price_rows: int,
+    outliers_removed: int,
+) -> None:
     priced_towns = town_summary.dropna(subset=["medianListingPrice"]).copy()
     income_towns = town_summary.dropna(subset=["priceToIncomeRatio"]).copy()
+    glossary_town = income_towns[income_towns["town"].str.lower() == "boston"]
+    if glossary_town.empty:
+        glossary_town = income_towns.head(1)
+
+    glossary_listing = df[
+        df[
+            [
+                "price",
+                "sqft",
+                "pricePerSqFt",
+                "pastSalePrice",
+                "priceAppreciation",
+                "annualizedAppreciation",
+                "estimatedCapRate",
+                "grossRentMultiplier",
+                "livabilityComposite",
+                "environmentalRiskComposite",
+            ]
+        ].notna().all(axis=1)
+    ].head(1)
 
     correlation_columns = [
         "price",
@@ -389,6 +425,12 @@ def write_analysis_summary(df: pd.DataFrame, town_summary: pd.DataFrame) -> None
         "listingCount": int(len(df)),
         "townCount": int(len(town_summary)),
         "listingLabelCount": int(df["city"].nunique()),
+        "rawRowCount": int(pd.read_csv(RAW_DATA_PATH, usecols=["price"]).shape[0]),
+        "duplicatesRemoved": int(duplicates_removed),
+        "nonMassachusettsRowsRemoved": int(state_filtered_out),
+        "outliersRemoved": int(outliers_removed),
+        "validPriceCount": int(valid_price_rows),
+        "listingCountWithIncomeMatch": int(df["medianHouseholdIncome"].notna().sum()),
         "statewideMedianPrice": float(df["price"].median()),
         "statewideMeanPrice": float(df["price"].mean()),
         "top10TownsByMedianPrice": priced_towns.nlargest(10, "medianListingPrice")[
@@ -419,6 +461,24 @@ def write_analysis_summary(df: pd.DataFrame, town_summary: pd.DataFrame) -> None
             for index, value in price_correlations.tail(3).items()
         ],
         "sensitivityByOneStdDev": compute_sensitivity(df),
+        "glossaryTownExample": glossary_town[
+            ["town", "medianListingPrice", "medianHouseholdIncome", "priceToIncomeRatio"]
+        ].to_dict(orient="records"),
+        "glossaryListingExample": glossary_listing[
+            [
+                "city",
+                "price",
+                "sqft",
+                "pricePerSqFt",
+                "pastSalePrice",
+                "priceAppreciation",
+                "annualizedAppreciation",
+                "estimatedCapRate",
+                "grossRentMultiplier",
+                "livabilityComposite",
+                "environmentalRiskComposite",
+            ]
+        ].to_dict(orient="records"),
     }
 
     ANALYSIS_SUMMARY_OUTPUT.write_text(json.dumps(summary, indent=2))
@@ -471,7 +531,9 @@ def clean_housing_data() -> pd.DataFrame:
     df["stateCode"] = df["stateCode"].fillna(
         df["url"].astype(str).str.extract(r"-([A-Z]{2})-\d{5}", expand=False)
     )
+    pre_state_filter_rows = len(df)
     df = df[df["stateCode"].fillna("MA") == "MA"].copy()
+    state_filtered_out = pre_state_filter_rows - len(df)
 
     df["city"] = df["city"].astype(str).str.strip().str.title()
     df["cityKey"] = df["city"].map(normalize_town_name)
@@ -505,6 +567,7 @@ def clean_housing_data() -> pd.DataFrame:
     ].min(axis=1)
 
     df = df[df["price"].notna() & (df["price"] > 0)]
+    valid_price_rows = len(df)
 
     outlier_mask = (df["price"] > 10_000_000) | (df["sqft"] > 15_000)
     outliers_removed = int(outlier_mask.sum())
@@ -574,7 +637,14 @@ def clean_housing_data() -> pd.DataFrame:
         df.to_csv(legacy_output, index=False)
 
     town_summary.to_csv(TOWN_SUMMARY_OUTPUT, index=False)
-    write_analysis_summary(df, town_summary)
+    write_analysis_summary(
+        df,
+        town_summary,
+        duplicates_removed=duplicates_removed,
+        state_filtered_out=state_filtered_out,
+        valid_price_rows=valid_price_rows,
+        outliers_removed=outliers_removed,
+    )
 
     print(f"Duplicate listing IDs removed: {duplicates_removed}")
     print(f"Outliers removed (price > $10M or sqft > 15,000): {outliers_removed}")

@@ -67,6 +67,17 @@
         return `${value >= 0 ? "+" : ""}${formatNumber(value, digits)}`;
     }
 
+    function formatPercent(value, digits = 0) {
+        if (!Number.isFinite(value)) {
+            return "N/A";
+        }
+        return new Intl.NumberFormat("en-US", {
+            style: "percent",
+            minimumFractionDigits: digits,
+            maximumFractionDigits: digits,
+        }).format(value);
+    }
+
     function labelizeVariable(variable) {
         const labelMap = {
             pricePerSqFt: "Price per sqft",
@@ -93,6 +104,7 @@
         formatShortCurrency,
         formatNumber,
         formatSigned,
+        formatPercent,
         labelizeVariable,
     };
 })();

@@ -2,6 +2,12 @@
   "listingCount": 8726,
   "townCount": 341,
   "listingLabelCount": 428,
+  "rawRowCount": 8983,
+  "duplicatesRemoved": 1,
+  "nonMassachusettsRowsRemoved": 151,
+  "outliersRemoved": 105,
+  "validPriceCount": 8831,
+  "listingCountWithIncomeMatch": 8694,
   "statewideMedianPrice": 725000.0,
   "statewideMeanPrice": 1115240.1713270685,
   "top10TownsByMedianPrice": [
@@ -155,5 +161,28 @@
     "sqft": 828231.2797021061,
     "livabilityComposite": 166136.04745024134,
     "environmentalRiskComposite": 175660.7892701073
-  }
+  },
+  "glossaryTownExample": [
+    {
+      "town": "Boston",
+      "medianListingPrice": 889000.0,
+      "medianHouseholdIncome": 94755.0,
+      "priceToIncomeRatio": 9.38209065484671
+    }
+  ],
+  "glossaryListingExample": [
+    {
+      "city": "Abington",
+      "price": 999000.0,
+      "sqft": 2642.0,
+      "pricePerSqFt": 378.1226343679031,
+      "pastSalePrice": 500000.0,
+      "priceAppreciation": 0.998,
+      "annualizedAppreciation": 0.0684557683390894,
+      "estimatedCapRate": 8.334894894894894,
+      "grossRentMultiplier": 11.997751772640802,
+      "livabilityComposite": 19.0,
+      "environmentalRiskComposite": 3.4
+    }
+  ]
 }

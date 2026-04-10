@@ -88,14 +88,31 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
             ["sqft", "bedrooms", "yearBuilt", "livabilityComposite"],
             as_=["metric", "metricValue"],
         )
+        .transform_calculate(
+            metricValueJitter="""
+            datum.metric === 'sqft'
+              ? datum.metricValue + (random() - 0.5) * 90
+              : datum.metric === 'yearBuilt'
+                ? datum.metricValue + (random() - 0.5) * 2
+                : datum.metricValue + (random() - 0.5) * 0.35
+            """
+        )
         .transform_filter("datum.metric === xMetric")
         .add_params(selector, brush)
     )
 
+    view_selector = alt.param(
+        name="scatterView",
+        value="Dots",
+        bind=alt.binding_radio(options=["Dots", "Density"], name="View "),
+    )
+    folded = folded.add_params(view_selector)
+
     points = (
-        folded.mark_circle(opacity=0.72, stroke="#ffffff", strokeWidth=0.5)
+        folded.transform_filter("scatterView === 'Dots'")
+        .mark_circle(opacity=0.35, stroke="#ffffff", strokeWidth=0.5, size=44)
         .encode(
-            x=alt.X("metricValue:Q", title="Selected Driver"),
+            x=alt.X("metricValueJitter:Q", title="Selected Driver"),
             y=alt.Y("price:Q", title="Listing Price ($)", scale=alt.Scale(zero=False)),
             color=alt.Color(
                 "propertyType:N",
@@ -126,6 +143,17 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
         )
     )
 
+    density = (
+        folded.transform_filter("scatterView === 'Density'")
+        .mark_rect()
+        .encode(
+            x=alt.X("metricValueJitter:Q", bin=alt.Bin(maxbins=38), title="Selected Driver"),
+            y=alt.Y("price:Q", bin=alt.Bin(maxbins=38), title="Listing Price ($)"),
+            color=alt.Color("count():Q", title="Listings", scale=alt.Scale(scheme="blues")),
+            tooltip=[alt.Tooltip("count():Q", title="Listings in bin")],
+        )
+    )
+
     summary = (
         folded.transform_filter(brush)
         .transform_aggregate(
@@ -143,7 +171,7 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
         .properties(width=760, height=28)
     )
 
-    return alt.vconcat(points, summary, spacing=12)
+    return alt.vconcat((density + points).properties(width=760, height=430), summary, spacing=12)
 
 
 def chart_grouped_bar_livability(df: pd.DataFrame) -> alt.Chart:
@@ -216,7 +244,7 @@ def chart_heatmap_correlation(df: pd.DataFrame) -> alt.Chart:
     corr = df[columns].corr(numeric_only=True).stack().reset_index()
     corr.columns = ["variable1", "variable2", "correlation"]
 
-    return (
+    base = (
         alt.Chart(corr)
         .mark_rect()
         .encode(
@@ -233,11 +261,26 @@ def chart_heatmap_correlation(df: pd.DataFrame) -> alt.Chart:
                 alt.Tooltip("correlation:Q", title="Correlation", format=".3f"),
             ],
         )
-        .properties(
-            width=640,
-            height=640,
-            title="Correlation Heatmap of Financial, Livability, and Risk Factors",
+    )
+    overlay = (
+        alt.Chart(corr)
+        .transform_filter("abs(datum.correlation) >= 0.3")
+        .mark_text(font="Source Sans 3", fontSize=10)
+        .encode(
+            x=alt.X("variable1:N", sort=columns),
+            y=alt.Y("variable2:N", sort=columns),
+            text=alt.Text("correlation:Q", format=".2f"),
+            color=alt.condition(
+                "abs(datum.correlation) >= 0.6",
+                alt.value("white"),
+                alt.value("#1a365d"),
+            ),
         )
+    )
+    return (base + overlay).properties(
+        width=640,
+        height=640,
+        title="Correlation Heatmap of Financial, Livability, and Risk Factors",
     )
 
 
@@ -247,7 +290,6 @@ def chart_income_vs_price(df: pd.DataFrame) -> alt.Chart:
         .agg(
             town=("city", "first"),
             medianHouseholdIncome=("medianHouseholdIncome", "first"),
-            population=("population", "first"),
             medianListingPrice=("price", "median"),
             priceToIncomeRatio=("priceToIncomeRatio", "first"),
         )
@@ -277,7 +319,6 @@ def chart_income_vs_price(df: pd.DataFrame) -> alt.Chart:
                 title="Median Listing Price ($)",
                 scale=alt.Scale(zero=False),
             ),
-            size=alt.Size("population:Q", title="Population", scale=alt.Scale(range=[40, 900])),
             color=alt.Color(
                 "priceToIncomeRatio:Q",
                 title="Price-to-Income Ratio",
@@ -288,7 +329,6 @@ def chart_income_vs_price(df: pd.DataFrame) -> alt.Chart:
                 alt.Tooltip("medianHouseholdIncome:Q", title="Median Income", format="$,.0f"),
                 alt.Tooltip("medianListingPrice:Q", title="Median Listing Price", format="$,.0f"),
                 alt.Tooltip("priceToIncomeRatio:Q", title="Price-to-Income", format=".2f"),
-                alt.Tooltip("population:Q", title="Population", format=",.0f"),
             ],
         )
     )

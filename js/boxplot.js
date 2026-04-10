@@ -39,6 +39,8 @@ class PropertyTypeBoxPlot {
             .append("g")
             .attr("transform", `translate(${this.margin.left},${this.margin.top})`);
 
+        this.resizeObserver = new ResizeObserver(() => this.render());
+        this.resizeObserver.observe(this.container.node());
         this.render();
     }
 
@@ -59,6 +61,8 @@ class PropertyTypeBoxPlot {
     }
 
     render() {
+        this.width = Math.max(720, this.container.node().getBoundingClientRect().width || 880);
+        this.svg.attr("viewBox", `0 0 ${this.width} ${this.height}`);
         const plotWidth = this.width - this.margin.left - this.margin.right;
         const plotHeight = this.height - this.margin.top - this.margin.bottom;
         const types = Array.from(new Set(this.data.map((row) => row.propertyType)));

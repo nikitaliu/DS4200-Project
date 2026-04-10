@@ -19,9 +19,11 @@ Open `http://localhost:8080`.
 - `data/ma_housing_cleaned.csv`
 - `data/town_summary.csv`
 - `data/analysis_summary.json`
+- `data/census_town_profiles.csv`
 - `data/ma_towns.topojson`
 - `altair_charts/`
 - `design_document.docx`
+- `presentation_script.md`
 
 ## GitHub Pages target
 

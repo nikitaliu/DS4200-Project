@@ -32,7 +32,8 @@ def main() -> None:
         "This design document explains the rationale for each visualization used in the "
         "Massachusetts Housing Financial Analysis Dashboard. The site combines D3 and Altair "
         "to connect housing prices with property characteristics, livability, affordability, "
-        "and environmental risk. The published website target is: "
+        "and environmental risk in a format designed for a general public audience. The published "
+        "website target is: "
         f"{PUBLISHED_URL}"
     )
 
@@ -45,10 +46,12 @@ def main() -> None:
         "across many municipalities on a map, while tooltips carry the supporting values for median income, "
         "listing count, and price-to-income ratio. A dropdown was preferred over small multiples because it "
         "keeps the map readable on a single page and lets the user reuse the same spatial memory while changing "
-        "the financial lens. A bubble map and county-level aggregation were rejected because they either distort "
-        "municipal boundaries or hide town-level variation that matters in housing analysis. From a financial "
-        "analysis perspective, the map acts like a market-screening dashboard that helps identify premium towns, "
-        "relative bargains, and places where risk and price move together instead of offsetting each other."
+        "the analytical lens. A bubble map and county-level aggregation were rejected because they either distort "
+        "municipal boundaries or hide town-level variation that matters in housing analysis. Clicking a town opens "
+        "a profile panel so users can move from a statewide view into local housing, demographic, and employment "
+        "context without leaving the page. From a financial analysis perspective, the map acts like a market-screening "
+        "dashboard that helps identify premium towns, relative bargains, and places where risk and price move together "
+        "instead of offsetting each other."
     )
 
     add_viz_section(
@@ -59,10 +62,10 @@ def main() -> None:
         "and livability composite appear as interchangeable x-axis choices so users can test different valuation "
         "stories without leaving the chart. Price is placed on the y-axis because it is the dependent market "
         "outcome, property type is encoded with color to separate market segments, and environmental risk is "
-        "encoded with point size so the chart can carry one more financial context variable without sacrificing "
+        "encoded with point size so the chart can carry one more context variable without sacrificing "
         "readability. Brush selection was preferred over a static summary because it lets users create their own "
-        "comp set and immediately inspect the implied mean and median price. A regression line alone was rejected "
-        "because it hides distributional spread and segment differences that matter to investors and buyers."
+        "comparison set and immediately inspect the implied mean and median price. A regression line alone was "
+        "rejected because it hides distributional spread and segment differences that matter to home shoppers."
     )
 
     add_viz_section(
@@ -86,8 +89,8 @@ def main() -> None:
         "main segmentation variable, and listing price is placed on the y-axis so the user can compare medians and IQRs "
         "at a glance. Hover tooltips expose the exact quartiles and counts, while clickable outliers reveal individual "
         "listing details. Histograms and violin plots were considered, but the box plot was preferred because it more "
-        "directly communicates risk dispersion and is easier for a finance audience to interpret quickly. This chart "
-        "supports risk-adjusted valuation by showing which segments have tight distributions and which contain the widest "
+        "directly communicates risk dispersion and is easier for a mixed audience to interpret quickly. This chart "
+        "supports segment comparison by showing which home types have tight distributions and which contain the widest "
         "pricing uncertainty."
     )
 
@@ -108,12 +111,23 @@ def main() -> None:
         "Visualization 6 — Altair Scatter Plot of Income Versus Price by Town",
         "The income-versus-price scatter plot was chosen to compare local purchasing power against local housing prices "
         "in a way that makes overvaluation and relative affordability visible at the town level. Median household income "
-        "is on the x-axis, median listing price is on the y-axis, population is encoded with point size, and price-to-income "
-        "ratio is encoded with color to keep the affordability story central. The dashed reference line at four times income "
-        "provides an interpretable lending-style benchmark. A choropleth alone would not show the cross-town affordability "
-        "relationship as clearly, and a ranked bar chart would hide how far towns sit above or below a common threshold. "
-        "This chart is the clearest way to show which towns appear expensive relative to their own economic base and which "
-        "look more balanced for first-time buyers or value-oriented investors."
+        "is on the x-axis, median listing price is on the y-axis, and price-to-income ratio is encoded with color to keep "
+        "the affordability story central. The dashed reference line at four times income provides an interpretable lending-style "
+        "benchmark. A choropleth alone would not show the cross-town affordability relationship as clearly, and a ranked bar chart "
+        "would hide how far towns sit above or below a common threshold. This chart is the clearest way to show which towns appear "
+        "expensive relative to their own economic base and which look more balanced for first-time buyers or renters comparing where "
+        "they may have a better chance of staying within reach."
+    )
+
+    document.add_heading("Town Profile Interaction", level=1)
+    document.add_paragraph(
+        "The choropleth includes a click-through town profile panel inspired by MAPC DataCommon. We chose a slide-in "
+        "panel instead of generating separate HTML pages because it preserves the single-page storytelling flow required "
+        "by the course while still giving users a place-specific drill-down. The Housing tab summarizes listing counts, "
+        "prices, and property-type mix from the cleaned Zillow data. The Demographics tab shows ACS income, tenure, age, "
+        "and race or ethnicity context. The Employment tab uses ACS industry counts to show what kinds of work are most "
+        "common in each town. This interaction matters because it helps a general audience move from statewide patterns to "
+        "town-level context without losing orientation."
     )
 
     document.add_heading("Assumptions and Tradeoffs", level=1)

@@ -1,92 +1,68 @@
-function setText(id, value) {
-    document.querySelectorAll(`#${id}, [data-fill="${id}"]`).forEach((node) => {
+function setText(target, value) {
+    document.querySelectorAll(`#${target}, [data-fill="${target}"]`).forEach((node) => {
         node.textContent = value;
     });
-}
-
-function setHTML(id, value) {
-    const node = document.getElementById(id);
-    if (node) {
-        node.innerHTML = value;
-    }
-}
-
-function renderTownList(id, rows, formatter) {
-    const list = document.getElementById(id);
-    if (!list || !rows) {
-        return;
-    }
-    list.innerHTML = rows
-        .map(
-            (row) =>
-                `<li><strong>${row.town}</strong> ${formatter(row.medianListingPrice)} median across ${row.listingCount} listings</li>`
-        )
-        .join("");
 }
 
 async function populateSummary() {
     try {
         const summary = await d3.json("data/analysis_summary.json");
         const utils = window.maUtils;
+        const townExample = summary.glossaryTownExample?.[0] || {};
+        const listingExample = summary.glossaryListingExample?.[0] || {};
 
         setText("hero-listings", summary.listingCount.toLocaleString("en-US"));
         setText("hero-towns", summary.incomeCoverageTownCount.toLocaleString("en-US"));
         setText("hero-median", utils.formatCurrency(summary.statewideMedianPrice));
         setText("hero-risk", utils.formatSigned(summary.environmentalRiskPriceCorrelation, 3));
 
-        setText("median-price", utils.formatCurrency(summary.statewideMedianPrice));
-        setText("mean-price", utils.formatCurrency(summary.statewideMeanPrice));
-        setText("top-town", summary.top10TownsByMedianPrice[0]?.town ?? "--");
-        setText("bottom-town", summary.bottom10TownsByMedianPrice[0]?.town ?? "--");
-        setText("unaffordable-count", String(summary.unaffordableTownCount));
-        setText("coverage-count", String(summary.incomeCoverageTownCount));
-        setText("max-ratio-town", summary.priceToIncomeMaxTown[0]?.town ?? "--");
-        setText(
-            "max-ratio-value",
-            `${utils.formatNumber(summary.priceToIncomeMaxTown[0]?.priceToIncomeRatio, 1)}x`
-        );
-        setText("min-ratio-town", summary.priceToIncomeMinTown[0]?.town ?? "--");
-        setText(
-            "min-ratio-value",
-            `${utils.formatNumber(summary.priceToIncomeMinTown[0]?.priceToIncomeRatio, 1)}x`
-        );
+        setText("method-raw-rows", summary.rawRowCount.toLocaleString("en-US"));
+        setText("method-duplicates", summary.duplicatesRemoved.toLocaleString("en-US"));
+        setText("method-non-ma", summary.nonMassachusettsRowsRemoved.toLocaleString("en-US"));
+        setText("method-cleaned-rows", summary.listingCount.toLocaleString("en-US"));
+        setText("method-income-towns", summary.incomeCoverageTownCount.toLocaleString("en-US"));
 
-        const positive = summary.topPositivePriceCorrelations || [];
-        const negative = summary.topNegativePriceCorrelations || [];
-        setText("corr-feature-1", utils.labelizeVariable(positive[0]?.variable ?? "sqft"));
-        setText("corr-feature-1-value", utils.formatSigned(positive[0]?.correlation ?? 0, 3));
-        setText("corr-feature-2", utils.labelizeVariable(positive[1]?.variable ?? "bathrooms"));
-        setText("corr-feature-2-value", utils.formatSigned(positive[1]?.correlation ?? 0, 3));
-        setText("corr-feature-3", utils.labelizeVariable(negative[negative.length - 1]?.variable ?? "fireRisk"));
-        setText(
-            "corr-feature-3-value",
-            utils.formatSigned(negative[negative.length - 1]?.correlation ?? 0, 3)
-        );
+        if (listingExample.price && listingExample.sqft && listingExample.pricePerSqFt) {
+            setText(
+                "glossary-ppsf-example",
+                `${utils.formatCurrency(listingExample.price)} ÷ ${utils.formatNumber(listingExample.sqft, 0)} sqft = ${utils.formatCurrency(listingExample.pricePerSqFt)} per sqft`
+            );
+        }
 
-        setText(
-            "sensitivity-sqft",
-            utils.formatCurrency(summary.sensitivityByOneStdDev?.sqft ?? 0)
-        );
-        setText(
-            "sensitivity-livability",
-            utils.formatCurrency(summary.sensitivityByOneStdDev?.livabilityComposite ?? 0)
-        );
-        setText(
-            "sensitivity-risk",
-            utils.formatCurrency(summary.sensitivityByOneStdDev?.environmentalRiskComposite ?? 0)
-        );
+        if (townExample.town) {
+            setText(
+                "glossary-ratio-example",
+                `${townExample.town} median price ${utils.formatCurrency(townExample.medianListingPrice)} ÷ median income ${utils.formatCurrency(townExample.medianHouseholdIncome)} = ${utils.formatNumber(townExample.priceToIncomeRatio, 1)}`
+            );
+        }
 
-        setText(
-            "risk-correlation",
-            utils.formatSigned(summary.environmentalRiskPriceCorrelation, 3)
-        );
+        if (listingExample.estimatedCapRate) {
+            setText(
+                "glossary-cap-rate-example",
+                `${listingExample.city} is estimated at ${utils.formatNumber(listingExample.estimatedCapRate, 2)}%`
+            );
+        }
 
-        renderTownList("top-town-list", summary.top10TownsByMedianPrice.slice(0, 5), utils.formatCurrency);
-        renderTownList(
-            "bottom-town-list",
-            summary.bottom10TownsByMedianPrice.slice(0, 5),
-            utils.formatCurrency
-        );
+        if (listingExample.grossRentMultiplier) {
+            setText(
+                "glossary-grm-example",
+                `${listingExample.city} has an estimated GRM of ${utils.formatNumber(listingExample.grossRentMultiplier, 1)}`
+            );
+        }
+
+        if (listingExample.priceAppreciation) {
+            setText(
+                "glossary-roi-example",
+                `${listingExample.city} shows an estimated ROI of ${utils.formatPercent(listingExample.priceAppreciation, 1)} since the past sale`
+            );
+        }
+
+        if (listingExample.annualizedAppreciation) {
+            setText(
+                "glossary-appreciation-example",
+                `${listingExample.city} averages about ${utils.formatPercent(listingExample.annualizedAppreciation, 1)} per year`
+            );
+        }
     } catch (error) {
         console.error("Unable to load analysis summary", error);
     }

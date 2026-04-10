@@ -100,7 +100,7 @@ a:hover {
     max-width: var(--max-width);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.75rem;
     align-items: stretch;
 }
@@ -223,6 +223,7 @@ main section {
     border-radius: 26px;
     box-shadow: var(--shadow);
     padding: 2rem;
+    overflow-x: hidden;
 }
 
 .section-kicker {
@@ -306,8 +307,9 @@ main section {
     border: 1px solid rgba(26, 54, 93, 0.08);
     box-shadow: var(--shadow);
     padding: 1.15rem;
-    min-width: 320px;
+    min-width: 0;
     min-height: 520px;
+    max-width: 100%;
 }
 
 .resizable-shell {

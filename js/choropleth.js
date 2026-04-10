@@ -73,6 +73,7 @@ class ChoroplethMap {
         controls.select("select").on("change", (event) => {
             this.metric = event.target.value;
             this.draw();
+            window.dispatchEvent(new CustomEvent("map-metric-changed", { detail: { metric: this.metric } }));
         });
 
         this.status = this.container.append("div").attr("class", "map-status");

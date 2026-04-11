@@ -7,6 +7,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import altair as alt
+import numpy as np
 import pandas as pd
 
 from data_cleaning import PRICE_QUARTILE_LABELS, ROOT
@@ -65,7 +66,9 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
             "propertyType",
             "sqft",
             "bedrooms",
+            "bathrooms",
             "yearBuilt",
+            "ageOfHome",
             "livabilityComposite",
             "environmentalRiskComposite",
         ]
@@ -75,9 +78,17 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
         name="xMetric",
         value="sqft",
         bind=alt.binding_select(
-            options=["sqft", "bedrooms", "yearBuilt", "livabilityComposite"],
-            labels=["Square Footage", "Bedrooms", "Year Built", "Livability Composite"],
+            options=["sqft", "bathrooms", "bedrooms", "ageOfHome"],
+            labels=["Square Footage", "Bathrooms", "Bedrooms", "Age of Home"],
             name="X-axis feature ",
+        ),
+    )
+    property_filter = alt.param(
+        name="propertyFilter",
+        value="All",
+        bind=alt.binding_select(
+            options=["All", *PROPERTY_TYPE_DOMAIN],
+            name="Property type ",
         ),
     )
     brush = alt.selection_interval(name="priceBrush")
@@ -85,32 +96,25 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
     folded = (
         alt.Chart(chart_df)
         .transform_fold(
-            ["sqft", "bedrooms", "yearBuilt", "livabilityComposite"],
+            ["sqft", "bathrooms", "bedrooms", "ageOfHome"],
             as_=["metric", "metricValue"],
         )
         .transform_calculate(
             metricValueJitter="""
             datum.metric === 'sqft'
               ? datum.metricValue + (random() - 0.5) * 90
-              : datum.metric === 'yearBuilt'
+              : datum.metric === 'ageOfHome'
                 ? datum.metricValue + (random() - 0.5) * 2
                 : datum.metricValue + (random() - 0.5) * 0.35
             """
         )
         .transform_filter("datum.metric === xMetric")
-        .add_params(selector, brush)
+        .transform_filter("propertyFilter === 'All' || datum.propertyType === propertyFilter")
+        .add_params(selector, property_filter, brush)
     )
-
-    view_selector = alt.param(
-        name="scatterView",
-        value="Dots",
-        bind=alt.binding_radio(options=["Dots", "Density"], name="View "),
-    )
-    folded = folded.add_params(view_selector)
 
     points = (
-        folded.transform_filter("scatterView === 'Dots'")
-        .mark_circle(opacity=0.35, stroke="#ffffff", strokeWidth=0.5, size=44)
+        folded.mark_circle(opacity=0.38, stroke="#ffffff", strokeWidth=0.6, size=58)
         .encode(
             x=alt.X("metricValueJitter:Q", title="Selected Driver"),
             y=alt.Y("price:Q", title="Listing Price ($)", scale=alt.Scale(zero=False)),
@@ -130,9 +134,9 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
                 alt.Tooltip("propertyType:N", title="Property Type"),
                 alt.Tooltip("price:Q", title="Price", format="$,.0f"),
                 alt.Tooltip("sqft:Q", title="Sqft", format=",.0f"),
+                alt.Tooltip("bathrooms:Q", title="Bathrooms", format=".1f"),
                 alt.Tooltip("bedrooms:Q", title="Bedrooms", format=".0f"),
-                alt.Tooltip("yearBuilt:Q", title="Year Built", format=".0f"),
-                alt.Tooltip("livabilityComposite:Q", title="Livability", format=".1f"),
+                alt.Tooltip("ageOfHome:Q", title="Age of Home", format=".0f"),
                 alt.Tooltip("environmentalRiskComposite:Q", title="Env. Risk", format=".1f"),
             ],
         )
@@ -140,17 +144,6 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
             width=760,
             height=430,
             title="Price Drivers and Comparable Listing Selection",
-        )
-    )
-
-    density = (
-        folded.transform_filter("scatterView === 'Density'")
-        .mark_rect()
-        .encode(
-            x=alt.X("metricValueJitter:Q", bin=alt.Bin(maxbins=38), title="Selected Driver"),
-            y=alt.Y("price:Q", bin=alt.Bin(maxbins=38), title="Listing Price ($)"),
-            color=alt.Color("count():Q", title="Listings", scale=alt.Scale(scheme="blues")),
-            tooltip=[alt.Tooltip("count():Q", title="Listings in bin")],
         )
     )
 
@@ -171,7 +164,106 @@ def chart_scatter_price_drivers(df: pd.DataFrame) -> alt.Chart:
         .properties(width=760, height=28)
     )
 
-    return alt.vconcat((density + points).properties(width=760, height=430), summary, spacing=12)
+    return alt.vconcat(points, summary, spacing=12)
+
+
+def chart_feature_importance(df: pd.DataFrame) -> alt.Chart:
+    model_df = df[
+        [
+            "price",
+            "sqft",
+            "bathrooms",
+            "bedrooms",
+            "ageOfHome",
+            "livabilityComposite",
+            "environmentalRiskComposite",
+        ]
+    ].dropna()
+
+    feature_columns = [
+        "sqft",
+        "bathrooms",
+        "bedrooms",
+        "ageOfHome",
+        "livabilityComposite",
+        "environmentalRiskComposite",
+    ]
+
+    x_raw = model_df[feature_columns]
+    x = (x_raw - x_raw.mean()) / x_raw.std(ddof=0)
+    y = (model_df["price"] - model_df["price"].mean()) / model_df["price"].std(ddof=0)
+
+    coefficients, *_ = np.linalg.lstsq(x.to_numpy(), y.to_numpy(), rcond=None)
+
+    importance = pd.DataFrame(
+        {
+            "feature": feature_columns,
+            "standardizedEffect": coefficients,
+        }
+    )
+    importance["featureLabel"] = importance["feature"].map(
+        {
+            "sqft": "Square Footage",
+            "bathrooms": "Bathrooms",
+            "bedrooms": "Bedrooms",
+            "ageOfHome": "Age of Home",
+            "livabilityComposite": "Livability Composite",
+            "environmentalRiskComposite": "Environmental Risk Composite",
+        }
+    )
+    importance["direction"] = importance["standardizedEffect"].apply(
+        lambda value: "Positive association" if value >= 0 else "Negative association"
+    )
+    importance["absEffect"] = importance["standardizedEffect"].abs()
+    importance = importance.sort_values("absEffect", ascending=False)
+
+    base = alt.Chart(importance)
+    bars = base.mark_bar(cornerRadiusEnd=6).encode(
+        x=alt.X(
+            "standardizedEffect:Q",
+            title="Standardized Association With Price",
+            axis=alt.Axis(format=".2f"),
+        ),
+        y=alt.Y(
+            "featureLabel:N",
+            sort=importance["featureLabel"].tolist(),
+            title=None,
+        ),
+        color=alt.Color(
+            "direction:N",
+            title="Direction",
+            scale=alt.Scale(
+                domain=["Positive association", "Negative association"],
+                range=["#2b6cb0", "#e53e3e"],
+            ),
+        ),
+        tooltip=[
+            alt.Tooltip("featureLabel:N", title="Feature"),
+            alt.Tooltip("standardizedEffect:Q", title="Standardized effect", format=".3f"),
+            alt.Tooltip("direction:N", title="Direction"),
+        ],
+    )
+    labels = base.mark_text(
+        align="left",
+        baseline="middle",
+        dx=6,
+        font="Source Sans 3",
+        fontSize=12,
+        color="#1a365d",
+    ).encode(
+        x=alt.X("standardizedEffect:Q"),
+        y=alt.Y("featureLabel:N", sort=importance["featureLabel"].tolist()),
+        text=alt.Text("standardizedEffect:Q", format=".2f"),
+    )
+    rule = alt.Chart(pd.DataFrame({"x": [0]})).mark_rule(color="#6b7b91", strokeDash=[5, 4]).encode(
+        x="x:Q"
+    )
+
+    return (rule + bars + labels).properties(
+        width=760,
+        height=280,
+        title="Which Home Features Are Most Strongly Associated With Price?",
+    )
 
 
 def chart_grouped_bar_livability(df: pd.DataFrame) -> alt.Chart:
@@ -363,6 +455,7 @@ def main() -> None:
     df = load_data()
 
     save_chart(chart_scatter_price_drivers(df), "scatter_price_drivers.html")
+    save_chart(chart_feature_importance(df), "feature_importance_price.html")
     save_chart(chart_grouped_bar_livability(df), "grouped_bar_livability.html")
     save_chart(chart_heatmap_correlation(df), "heatmap_correlation.html")
     save_chart(chart_income_vs_price(df), "income_vs_price.html")

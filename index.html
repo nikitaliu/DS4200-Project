@@ -17,6 +17,7 @@
                 <li><a href="#research-questions">Questions</a></li>
                 <li><a href="#methodology">Methodology</a></li>
                 <li><a href="#findings">Findings</a></li>
+                <li><a href="#summary">Summary</a></li>
                 <li><a href="#future-directions">Future Directions</a></li>
                 <li><a href="#references">References</a></li>
             </ul>
@@ -47,7 +48,7 @@
         <section id="introduction">
             <div class="section-card">
                 <p class="section-kicker">Introduction</p>
-                <h2>A plain-English look at how Massachusetts housing works</h2>
+                <h2>Introduction</h2>
                 <p class="body-copy">
                     This project is an interactive explainer about housing prices across Massachusetts. We use
                     public listing data and U.S. Census town data to show how prices change from one place to
@@ -59,17 +60,14 @@
                     $97,941 in 2021 to about $162,224 in 2025. That gap affects where people can live, how far they
                     commute, and how long it takes to build financial stability.
                 </p>
-                <p class="body-copy">
-                    We wrote this site for the general public, not for specialists. Every figure has a plain-English
-                    takeaway, and technical terms are explained inline where they first appear.
-                </p>
+
             </div>
         </section>
 
         <section id="research-questions">
             <div class="section-card">
                 <p class="section-kicker">Research Questions</p>
-                <h2>What questions does this project answer?</h2>
+                <h2>Research Questions</h2>
                 <ol class="question-list">
                     <li>How do housing prices vary geographically across Massachusetts?</li>
                     <li>What property features, such as size, age, and home type, have the strongest relationship with price?</li>
@@ -82,7 +80,7 @@
         <section id="methodology">
             <div class="section-card">
                 <p class="section-kicker">Methodology</p>
-                <h2>How we built this analysis</h2>
+                <h2>Methodology</h2>
 
                 <div class="methodology-block">
                     <h3>Data sources</h3>
@@ -113,36 +111,14 @@
                         information for 328 towns.
                     </p>
                 </div>
-
-                <div class="methodology-grid">
-                    <div class="info-card">
-                        <h3>Kaggle housing data</h3>
-                        <p>
-                            The raw listing file includes prices, square footage, bedrooms, bathrooms, property
-                            type, walkability, bike, and transit scores, and five environmental risk fields
-                            (flood, fire, wind, heat, air quality).
-                        </p>
-                    </div>
-                    <div class="info-card">
-                        <h3>U.S. Census ACS 2023</h3>
-                        <p>
-                            The Census pull provides median household income, owner-versus-renter counts, median
-                            home value, race and ethnicity counts, age buckets, and employment by industry for
-                            each Massachusetts town.
-                        </p>
-                    </div>
-                </div>
             </div>
         </section>
 
         <section id="findings">
             <div class="section-card">
                 <p class="section-kicker">Findings</p>
-                <h2>What the charts show</h2>
-                <p class="section-intro">
-                    Each finding below answers one of the project’s research questions. The goal is not just to
-                    show a chart, but to explain what it means for people comparing where they might be able to live.
-                </p>
+                <h2>Findings</h2>
+                
 
                 <article class="finding-section" id="finding-1">
                     <div class="finding-heading">
@@ -158,15 +134,10 @@
                         <div id="choropleth-container"></div>
                     </div>
                     <div class="finding-text" id="rq1-explanation">
-                        <p>We mapped the median listing price for every town in Massachusetts. The color shading ranges
-                        from light yellow for lower-priced towns to deep red for the most expensive — making it easy
-                        to spot where housing costs cluster. The highest prices concentrate in coastal and island
-                        communities like Nantucket and Martha's Vineyard, and in inner-ring Boston suburbs such as
-                        Wellesley and Weston. Western Massachusetts towns are notably cheaper.</p>
-                        <p>This directly answers Research Question 1: location is the strongest broad filter on
-                        affordability before buyers even compare individual homes. Use the dropdown above to switch
-                        the map metric and explore how income pressure, investment returns, and environmental risk
-                        vary across the same geography.</p>
+                        <p>The highest prices concentrate in coastal and island communities like Nantucket and
+                        Martha’s Vineyard, and in inner-ring suburbs such as Wellesley and Weston, while western
+                        Massachusetts is notably cheaper. Location is the strongest broad filter on affordability
+                        before buyers even compare individual homes.</p>
                     </div>
                 </article>
 
@@ -178,8 +149,8 @@
                     <div class="chart-shell resizable-shell">
                         <h4>Scatter plot of price versus property features</h4>
                         <p class="chart-note">
-                            Switch the x-axis feature, brush a region to create a custom comparison set, and use the
-                            density toggle if the dots become crowded.
+                            Switch the x-axis feature, filter by property type, and brush a region to create a custom
+                            comparison set of comparable listings.
                         </p>
                         <iframe class="chart-frame" src="altair_charts/scatter_price_drivers.html" title="Scatter plot of price drivers"></iframe>
                     </div>
@@ -191,17 +162,27 @@
                         </p>
                         <div id="boxplot-container"></div>
                     </div>
+                    <div class="chart-shell resizable-shell">
+                        <h4>Feature importance for listing price</h4>
+                        <p class="chart-note">
+                            This ranked bar chart summarizes which home features are most strongly associated with
+                            listing price after putting the variables on the same standardized scale.
+                        </p>
+                        <iframe class="chart-frame" src="altair_charts/feature_importance_price.html" title="Feature importance for listing price"></iframe>
+                    </div>
                     <div class="finding-text">
-                        <p>The scatter plot above lets you explore how price relates to individual home features —
-                        switch the x-axis to compare square footage, number of bedrooms, bathrooms, or age. The
-                        clearest pattern is size: larger homes command higher prices, especially above 2,000 square
-                        feet. Bathrooms also track closely with price. Age is more mixed — a well-maintained older
-                        home can hold its value just as well as a newer build.</p>
-                        <p>The box plot below groups listings by property type. Each box covers the middle 50% of
-                        prices for that category — called the interquartile range (IQR). Single-family homes have
-                        the widest price spread and the highest median; condos cluster lower with less variation.
-                        Dots beyond the whiskers represent unusual outliers. Together, both charts show that buyers
-                        pay for physical features <em>and</em> the type of home, not just raw square footage.</p>
+                        <p>The scatter plot works like a comparable-sales view: it shows that listing price rises
+                        most clearly with square footage and bathrooms, while bedrooms add signal but not as strongly.
+                        Filtering by property type helps separate condo, single-family, townhouse, and multi-family
+                        markets so viewers are not comparing unlike homes.</p>
+                        <p>The D3 box plot adds the segment story. Single-family homes sit at the highest median price
+                        and also show the widest spread, which suggests more price uncertainty inside that segment.
+                        Condos and townhouses cluster into tighter bands, making them easier to compare within type.</p>
+                        <p>The ranked feature-importance chart gives the cleanest direct answer to Research Question 2:
+                        square footage and bathrooms are the strongest positive price drivers in this dataset, while
+                        age and environmental risk matter less once the major home features are considered together.
+                        Taken as a set, these three views show that buyers are paying for both the physical scale of a
+                        home and the market segment it belongs to.</p>
                     </div>
                 </article>
 
@@ -227,17 +208,10 @@
                         <iframe class="chart-frame" src="altair_charts/income_vs_price.html" title="Income versus price scatter plot"></iframe>
                     </div>
                     <div class="finding-text">
-                        <p>The grouped bar chart compares average walk, bike, and transit scores across four
-                        price groups, from the cheapest 25% of listings to the most expensive. Walk score — a 0–100
-                        measure of how many daily errands can be done on foot — shows the sharpest jump between
-                        price groups. The trend is consistent across all three dimensions: more expensive homes are
-                        in more convenient locations. Convenience is priced in.</p>
-                        <p>The income-versus-price chart plots each town's median household income against
-                        its median listing price. The dashed line marks a traditional affordability benchmark: a
-                        home priced at four times local annual income. Towns above the line are financially
-                        stretched — and the majority of Massachusetts towns fall above it. Even towns with
-                        well-above-average incomes are often not in affordable territory, showing that the
-                        housing affordability gap is a statewide challenge, not just a Greater Boston problem.</p>
+                        <p>More expensive listings consistently score higher on walkability, bikeability, and transit
+                        access — convenience is priced in. Meanwhile, the income-versus-price chart shows that the
+                        majority of Massachusetts towns sit above the traditional 4× income affordability benchmark,
+                        revealing a statewide gap, not just a Greater Boston problem.</p>
                     </div>
                 </article>
 
@@ -255,24 +229,37 @@
                         <iframe class="chart-frame" src="altair_charts/heatmap_correlation.html" title="Correlation heatmap"></iframe>
                     </div>
                     <div class="finding-text">
-                        <p>We calculated how strongly each variable pair moves together using a correlation
-                        coefficient — a number from −1 to +1 where positive means two things tend to rise together
-                        and negative means one tends to fall as the other rises. We found that environmental risk is
-                        not strongly discounted in listing prices: the relationship between price and composite
-                        environmental risk is weakly positive rather than strongly negative.</p>
-                        <p>This matters because it suggests that hazard exposure is not yet fully priced into the
-                        market. Some desirable locations remain expensive even when they carry elevated flood, fire,
-                        or heat risk — meaning the true long-term cost of living there may be higher than the
-                        listing price implies.</p>
+                        <p>The correlation between price and composite environmental risk is weakly positive rather
+                        than strongly negative, suggesting that hazard exposure is not yet fully priced into the
+                        market. Some desirable coastal locations remain expensive despite elevated flood, fire, or
+                        heat risk — meaning the true long-term cost of living there may be higher than the listing
+                        price implies.</p>
                     </div>
                 </article>
+            </div>
+        </section>
+
+        <section id="summary">
+            <div class="section-card">
+                <p class="section-kicker">Summary</p>
+                <h2>Summary</h2>
+                <p class="body-copy">
+                    This project explored housing prices across Massachusetts using 8,726 cleaned listings and
+                    Census income data for 328 towns. We found four main patterns: housing costs cluster heavily
+                    by geography, with coastal and inner-suburban towns far outpacing western Massachusetts;
+                    square footage and bathrooms are the strongest property-level price drivers; walkability and
+                    transit access come with a clear price premium; and environmental risks such as flood and fire
+                    are not discounted in listing prices — likely because the riskiest areas are also the most
+                    desirable coastal locations. These findings suggest that Massachusetts housing affordability
+                    is a statewide challenge shaped by location desirability, not just property size or condition.
+                </p>
             </div>
         </section>
 
         <section id="future-directions">
             <div class="section-card">
                 <p class="section-kicker">Future Directions</p>
-                <h2>What we would improve with more time</h2>
+                <h2>Future Directions</h2>
                 <div class="viz-grid">
                     <div class="info-card">
                         <h3>Deeper housing detail</h3>
@@ -302,7 +289,7 @@
         <section id="references">
             <div class="section-card">
                 <p class="section-kicker">References</p>
-                <h2>Data sources and supporting reading</h2>
+                <h2>References</h2>
                 <div class="viz-grid">
                     <div class="reference-card">
                         <h3>Data sources</h3>

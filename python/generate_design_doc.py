@@ -58,14 +58,14 @@ def main() -> None:
         document,
         "Visualization 2 — Altair Scatter Plot of Price Drivers",
         "The price-driver scatter plot was selected because comparable sales analysis is fundamentally about "
-        "seeing how listings cluster when a property attribute changes. Square footage, bedrooms, year built, "
-        "and livability composite appear as interchangeable x-axis choices so users can test different valuation "
-        "stories without leaving the chart. Price is placed on the y-axis because it is the dependent market "
-        "outcome, property type is encoded with color to separate market segments, and environmental risk is "
-        "encoded with point size so the chart can carry one more context variable without sacrificing "
-        "readability. Brush selection was preferred over a static summary because it lets users create their own "
-        "comparison set and immediately inspect the implied mean and median price. A regression line alone was "
-        "rejected because it hides distributional spread and segment differences that matter to home shoppers."
+        "seeing how listings cluster when a property attribute changes. Square footage, bathrooms, bedrooms, "
+        "and age of home appear as interchangeable x-axis choices so users can test different valuation stories "
+        "without leaving the chart. Price is placed on the y-axis because it is the dependent market outcome, "
+        "property type is encoded with color to separate market segments, and environmental risk is encoded with "
+        "point size so the chart can carry one more context variable without sacrificing readability. A property-type "
+        "filter and brush selection were preferred over a density toggle because they better support the practical "
+        "task of building a comparable listing set. A regression line alone was rejected because it hides distributional "
+        "spread and segment differences that matter to home shoppers."
     )
 
     add_viz_section(
@@ -96,7 +96,19 @@ def main() -> None:
 
     add_viz_section(
         document,
-        "Visualization 5 — Altair Correlation Heatmap of Financial and Risk Factors",
+        "Visualization 5 — Altair Ranked Bar Chart of Feature Importance",
+        "The ranked bar chart was added to answer the research question more directly than a scatter plot can on its "
+        "own. Each bar represents a standardized association between one home feature and listing price after the variables "
+        "have been put on the same scale, which makes it possible to compare square footage, bathrooms, bedrooms, age, "
+        "livability, and environmental risk in one view. Bar length was chosen as the main encoding because ranking is the "
+        "central task, while color communicates whether the association is positive or negative. A table of coefficients was "
+        "rejected because it is harder for a general audience to scan quickly. This chart translates the broader valuation "
+        "story into a compact analyst-style summary of which features appear to matter most."
+    )
+
+    add_viz_section(
+        document,
+        "Visualization 6 — Altair Correlation Heatmap of Financial and Risk Factors",
         "The correlation heatmap was selected because the project needs a compact factor-analysis view that makes it "
         "easy to compare many variable pairs at once. A diverging red-blue palette was used so positive and negative "
         "relationships are visually separable around zero, and tooltip interaction exposes the exact coefficient for "
@@ -108,7 +120,7 @@ def main() -> None:
 
     add_viz_section(
         document,
-        "Visualization 6 — Altair Scatter Plot of Income Versus Price by Town",
+        "Visualization 7 — Altair Scatter Plot of Income Versus Price by Town",
         "The income-versus-price scatter plot was chosen to compare local purchasing power against local housing prices "
         "in a way that makes overvaluation and relative affordability visible at the town level. Median household income "
         "is on the x-axis, median listing price is on the y-axis, and price-to-income ratio is encoded with color to keep "

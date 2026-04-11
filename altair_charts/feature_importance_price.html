@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@6.1.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"background": "#ffffff", "view": {"stroke": null}, "title": {"font": "Source Sans 3", "fontSize": 20, "color": "#1a365d"}, "axis": {"labelFont": "Source Sans 3", "titleFont": "Source Sans 3", "labelColor": "#1f2d3d", "titleColor": "#1a365d", "gridColor": "#d7e3f0", "domainColor": "#9bb0c8", "tickColor": "#9bb0c8"}, "legend": {"labelFont": "Source Sans 3", "titleFont": "Source Sans 3", "labelColor": "#1f2d3d", "titleColor": "#1a365d"}, "range": {"category": ["#2b6cb0", "#e53e3e", "#38a169", "#d69e2e"], "heatmap": {"scheme": "redblue"}}}, "layer": [{"data": {"name": "data-d285a7403ed98ae579761d64a864032b"}, "mark": {"type": "rule", "color": "#6b7b91", "strokeDash": [5, 4]}, "encoding": {"x": {"field": "x", "type": "quantitative"}}}, {"data": {"name": "data-45fc25d8374664b442151b8e0e54d9f5"}, "mark": {"type": "bar", "cornerRadiusEnd": 6}, "encoding": {"color": {"field": "direction", "scale": {"domain": ["Positive association", "Negative association"], "range": ["#2b6cb0", "#e53e3e"]}, "title": "Direction", "type": "nominal"}, "tooltip": [{"field": "featureLabel", "title": "Feature", "type": "nominal"}, {"field": "standardizedEffect", "format": ".3f", "title": "Standardized effect", "type": "quantitative"}, {"field": "direction", "title": "Direction", "type": "nominal"}], "x": {"axis": {"format": ".2f"}, "field": "standardizedEffect", "title": "Standardized Association With Price", "type": "quantitative"}, "y": {"field": "featureLabel", "sort": ["Bathrooms", "Square Footage", "Bedrooms", "Livability Composite", "Environmental Risk Composite", "Age of Home"], "title": null, "type": "nominal"}}}, {"data": {"name": "data-45fc25d8374664b442151b8e0e54d9f5"}, "mark": {"type": "text", "align": "left", "baseline": "middle", "color": "#1a365d", "dx": 6, "font": "Source Sans 3", "fontSize": 12}, "encoding": {"text": {"field": "standardizedEffect", "format": ".2f", "type": "quantitative"}, "x": {"field": "standardizedEffect", "type": "quantitative"}, "y": {"field": "featureLabel", "sort": ["Bathrooms", "Square Footage", "Bedrooms", "Livability Composite", "Environmental Risk Composite", "Age of Home"], "type": "nominal"}}}], "height": 280, "title": "Which Home Features Are Most Strongly Associated With Price?", "width": 760, "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json", "datasets": {"data-d285a7403ed98ae579761d64a864032b": [{"x": 0}], "data-45fc25d8374664b442151b8e0e54d9f5": [{"feature": "bathrooms", "standardizedEffect": 0.49040019549000957, "featureLabel": "Bathrooms", "direction": "Positive association", "absEffect": 0.49040019549000957}, {"feature": "sqft", "standardizedEffect": 0.4049010133321749, "featureLabel": "Square Footage", "direction": "Positive association", "absEffect": 0.4049010133321749}, {"feature": "bedrooms", "standardizedEffect": -0.21834686989623525, "featureLabel": "Bedrooms", "direction": "Negative association", "absEffect": 0.21834686989623525}, {"feature": "livabilityComposite", "standardizedEffect": 0.1282755867061205, "featureLabel": "Livability Composite", "direction": "Positive association", "absEffect": 0.1282755867061205}, {"feature": "environmentalRiskComposite", "standardizedEffect": 0.11358925387478759, "featureLabel": "Environmental Risk Composite", "direction": "Positive association", "absEffect": 0.11358925387478759}, {"feature": "ageOfHome", "standardizedEffect": 0.027221760396852986, "featureLabel": "Age of Home", "direction": "Positive association", "absEffect": 0.027221760396852986}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>

@@ -191,20 +191,22 @@
                         <h3>Do walkability and transit access come with a premium?</h3>
                     </div>
                     <div class="chart-shell resizable-shell">
-                        <h4>Livability scores by price quartile</h4>
-                        <p class="chart-note">
-                            We split listings into four equal price groups (Q1-Budget through Q4-Premium)
-                            and compared their average walk, bike, and transit scores.
-                        </p>
-                        <iframe class="chart-frame" src="altair_charts/grouped_bar_livability.html" title="Grouped bar chart of livability by price quartile" scrolling="no"></iframe>
-                    </div>
-                    <div class="chart-shell resizable-shell">
                         <h4>Town income versus median listing price</h4>
                         <p class="chart-note">
                             The red dashed line marks the 4× income affordability threshold. Towns above
                             it are price-stretched relative to local earnings.
                         </p>
                         <iframe class="chart-frame" src="altair_charts/income_vs_price.html" title="Income versus price scatter plot" scrolling="no"></iframe>
+                    </div>
+                    <div class="chart-shell resizable-shell">
+                        <h4>Livability scores by price quartile</h4>
+                        <p class="chart-note">
+                            We split listings into four equal price groups by listing price: Q1-Budget
+                            (under $500K), Q2-Moderate ($500K–$748K), Q3-Upper ($748K–$1.22M), and
+                            Q4-Premium (above $1.22M). Bars show the average walk, bike, and transit
+                            scores within each group.
+                        </p>
+                        <iframe class="chart-frame" src="altair_charts/grouped_bar_livability.html" title="Grouped bar chart of livability by price quartile" scrolling="no"></iframe>
                     </div>
                     <div class="finding-text">
                         <p>More expensive listings consistently score higher on walkability, bikeability, and transit
